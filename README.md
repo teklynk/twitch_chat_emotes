@@ -26,5 +26,8 @@ Be sure that channel= is set to your Twitch channel.
 
 Try to avoid using a speed less than 5000 (5 seconds)
 
+** This does Not need to run from a web server. You can simply clone the git repo and open bot.html in your default browser.
+ In OBS choose browser source and select Local File.
+
 # Try it!
 [https://twitch-chat-emotes.pages.dev/bot?channel=MrStreamer&speed=5000](https://twitch-chat-emotes.pages.dev/bot?channel=MrStreamer&speed=5000)
