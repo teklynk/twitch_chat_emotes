@@ -1,12 +1,16 @@
 body {
     overflow: hidden;
     background: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 #container {
     display: block;
     width: 1920px;
     height: 1080px;
+    padding: 0;
+    margin: 0;
 }
 
 .latestblock,

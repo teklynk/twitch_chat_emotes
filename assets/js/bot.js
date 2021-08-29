@@ -5,6 +5,8 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
+let fishTank = getUrlParameter('fishtank');
+
 let AnimationSpeed = getUrlParameter('speed');
 
 if (AnimationSpeed === '') {
@@ -104,11 +106,19 @@ client.on('message', (channel, tags, message, self) => {
             }
         });
 
-        $('.latestblock img').fadeIn(AnimationSpeed);
+        if (!fishTank) {
 
-        $('.latestblock img').fadeOut(AnimationSpeed, function () {
-            $('.latestblock').remove();
-        });
+            $('.latestblock img').fadeIn(AnimationSpeed);
+
+            $('.latestblock img').fadeOut(AnimationSpeed, function () {
+                $('.latestblock').remove();
+            });
+
+        } else {
+
+            $('.latestblock img').fadeIn(AnimationSpeed);
+
+        }
 
     }
 
