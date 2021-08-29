@@ -5,8 +5,19 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
-//let botName = getUrlParameter('bot');
+let animationSpeed = getUrlParameter('speed');
+
+if (animationSpeed === '') {
+    animationSpeed = 5000;
+}
+
+animationSpeed = parseInt(animationSpeed);
+
 let channelName = getUrlParameter('channel');
+
+if (channelName === '') {
+    alert('Set ?channel=yourTwitchChannel in the URL');
+}
 
 function htmlEntities(html) {
     function it() {
@@ -66,10 +77,11 @@ client.connect();
 client.on('message', (channel, tags, message, self) => {
 
     let randomNum = Math.floor((Math.random() * 1000) + 1);
-
     let chatname = `${tags['display-name']}`;
     let chatmessage = message.replace(/(<([^>]+)>)/ig, "");
     let chatemotes = tags.emotes;
+
+    console.log(randomNum);
 
     // Ignore echoed messages.
     if (self) return;
@@ -80,21 +92,22 @@ client.on('message', (channel, tags, message, self) => {
     chatEmoteArr = chatEmoteArr.filter(Boolean);
 
     if (chatEmoteArr.length !== 0) {
+        $('.latestblock img').fadeIn(animationSpeed);
 
-        $('.latestblock img').fadeIn(5000);
-
-        $.each( chatEmoteArr, function( key, value ) {
-            //console.log( value );
+        $.each(chatEmoteArr, function (key, value) {
             if (value !== "" || value !== null) {
-                $("<div class='latestblock'><img src=" + value + " /></div>").appendTo( "#container" ).css({ top: randomNum, left: randomNum });
+
+                $("<div class='latestblock'><img src=" + value + " /></div>").appendTo("#container").css({
+                    top: randomNum + 'px',
+                    left: randomNum + 'px'
+                });
+
             }
         });
 
-        $('.latestblock img').fadeOut(5000);
-
-        setTimeout(function () {
-            $("#container").html('');
-        }, 5500);
+        $('.latestblock img').fadeOut(animationSpeed, function () {
+            $('.latestblock').remove();
+        });
 
     }
 
@@ -131,12 +144,12 @@ client.on('message', (channel, tags, message, self) => {
         obj.animate({
             top: newY,
             left: newX
-        }, 8000, function() {
+        }, animationSpeed, function () {
             moveRandom(obj);
         });
     }
 
-    $('.latestblock').each(function() {
+    $('.latestblock').each(function () {
         moveRandom($(this));
     });
 });
