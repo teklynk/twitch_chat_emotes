@@ -13,9 +13,9 @@ if fishtank=true, emotes will persist on screen until you refresh the browser/br
 http://example.com/bot.html?channel=MrStreamer&speed=5000&fishtank=true
 
 # Examples
-[sample1](https://github.com/teklynk/twitch_chat_emotes/blob/main/sample_standard.mp4)
+[sample1](https://github.com/teklynk/twitch_chat_emotes/blob/master/sample_standard.mp4?raw=true)
 
-[sample2](https://github.com/teklynk/twitch_chat_emotes/blob/main/sample_fishtank.mp4)
+[sample2](https://github.com/teklynk/twitch_chat_emotes/blob/master/sample_fishtank.mp4?raw=true)
 
 # How do I use this?
 Add URL as a browser source in OBS.
