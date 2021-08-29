@@ -5,13 +5,13 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
-let animationSpeed = getUrlParameter('speed');
+let AnimationSpeed = getUrlParameter('speed');
 
-if (animationSpeed === '') {
-    animationSpeed = 5000;
+if (AnimationSpeed === '') {
+    AnimationSpeed = 5000;
 }
 
-animationSpeed = parseInt(animationSpeed);
+AnimationSpeed = parseInt(AnimationSpeed);
 
 let channelName = getUrlParameter('channel');
 
@@ -92,7 +92,6 @@ client.on('message', (channel, tags, message, self) => {
     chatEmoteArr = chatEmoteArr.filter(Boolean);
 
     if (chatEmoteArr.length !== 0) {
-        $('.latestblock img').fadeIn(animationSpeed);
 
         $.each(chatEmoteArr, function (key, value) {
             if (value !== "" || value !== null) {
@@ -105,7 +104,9 @@ client.on('message', (channel, tags, message, self) => {
             }
         });
 
-        $('.latestblock img').fadeOut(animationSpeed, function () {
+        $('.latestblock img').fadeIn(AnimationSpeed);
+
+        $('.latestblock img').fadeOut(AnimationSpeed, function () {
             $('.latestblock').remove();
         });
 
@@ -144,7 +145,7 @@ client.on('message', (channel, tags, message, self) => {
         obj.animate({
             top: newY,
             left: newX
-        }, animationSpeed, function () {
+        }, AnimationSpeed, function () {
             moveRandom(obj);
         });
     }
