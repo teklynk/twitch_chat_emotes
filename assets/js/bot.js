@@ -7,18 +7,20 @@ function getUrlParameter(name) {
 
 let fishTank = getUrlParameter('fishtank');
 
-let AnimationSpeed = getUrlParameter('speed');
+let animationSpeed = getUrlParameter('speed');
 
-if (AnimationSpeed === '') {
-    AnimationSpeed = 5000;
+// default value if speed is not set in url
+if (!animationSpeed) {
+    animationSpeed = 5000;
 }
 
-AnimationSpeed = parseInt(AnimationSpeed);
+// convert animationSpeed string to integer
+animationSpeed = parseInt(animationSpeed);
 
 let channelName = getUrlParameter('channel');
 
 if (channelName === '') {
-    alert('Set ?channel=yourTwitchChannel in the URL');
+    alert('Channel name is missing. Set ?channel=yourTwitchChannel in the URL and reload the browser');
 }
 
 function htmlEntities(html) {
@@ -79,11 +81,9 @@ client.connect();
 client.on('message', (channel, tags, message, self) => {
 
     let randomNum = Math.floor((Math.random() * 1000) + 1);
-    let chatname = `${tags['display-name']}`;
-    let chatmessage = message.replace(/(<([^>]+)>)/ig, "");
+    //let chatname = `${tags['display-name']}`; // not used since we are not displaying user names
+    //let chatmessage = message.replace(/(<([^>]+)>)/ig, ""); // not used since we are only looking for tags.emotes
     let chatemotes = tags.emotes;
-
-    console.log(randomNum);
 
     // Ignore echoed messages.
     if (self) return;
@@ -108,15 +108,15 @@ client.on('message', (channel, tags, message, self) => {
 
         if (!fishTank) {
 
-            $('.latestblock img').fadeIn(AnimationSpeed);
+            $('.latestblock img').fadeIn(animationSpeed);
 
-            $('.latestblock img').fadeOut(AnimationSpeed, function () {
+            $('.latestblock img').fadeOut(animationSpeed, function () {
                 $('.latestblock').remove();
             });
 
         } else {
 
-            $('.latestblock img').fadeIn(AnimationSpeed);
+            $('.latestblock img').fadeIn(animationSpeed);
 
         }
 
@@ -155,7 +155,7 @@ client.on('message', (channel, tags, message, self) => {
         obj.animate({
             top: newY,
             left: newX
-        }, AnimationSpeed, function () {
+        }, animationSpeed, function () {
             moveRandom(obj);
         });
     }
