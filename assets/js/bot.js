@@ -7,6 +7,16 @@ function getUrlParameter(name) {
 
 let fishTank = getUrlParameter('fishtank');
 
+let emoteSize = getUrlParameter('size');
+
+// default value if size is not set in url
+if (!emoteSize) {
+    emoteSize = 3;
+}
+
+// convert emoteQuality string to integer
+emoteSize = parseInt(emoteSize);
+
 let animationSpeed = getUrlParameter('speed');
 
 // default value if speed is not set in url
@@ -64,7 +74,7 @@ function formatEmotes(text, emotes) {
                         return ''
                     });
                 splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[0] + 1, splitText.length));
-                splitText.splice(mote[0], 0, "https://static-cdn.jtvnw.net/emoticons/v2/" + i + "/default/dark/3.0,");
+                splitText.splice(mote[0], 0, "https://static-cdn.jtvnw.net/emoticons/v2/" + i + "/default/dark/" + emoteSize + ".0,");
             }
         }
     }

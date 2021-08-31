@@ -5,16 +5,20 @@
 
 # URL parameters
 
-speed=transition speed, as well as fade-in/fade-out speed
+***speed***=transition speed, as well as fade-in/fade-out speed
 
-channel=your main twitch channel
+***channel***=your main twitch channel
 
-fishtank=true
+***size***=1,2,3
+
+* Twitch emotes come in 3 different sizes. 28x28, 56x56, 112x112. Default is 3 (112x112). Changing this can help performance. 
+
+***fishtank***=true
 
 * if **fishtank=true**, emotes will persist on screen until you refresh the browser source in OBS. 
 You can refresh the browser source by clicking "Refresh cache of current page" in the browser source properties.
 
-http://example.com/bot.html?channel=MrStreamer&speed=5000&fishtank=true
+http://example.com/bot.html?channel=MrStreamer&speed=5000&size=3&fishtank=true
 
 # Example Videos
 * [sample1 video - Standard: fade-in/fade-out effect](https://github.com/teklynk/twitch_chat_emotes/blob/master/sample_standard.mp4?raw=true)

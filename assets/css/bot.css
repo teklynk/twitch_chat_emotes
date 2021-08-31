@@ -15,10 +15,10 @@ body {
 
 .latestblock,
 .latestblock img {
-    width: 100px;
-    height: 100px;
-    min-width: 50px;
-    min-height: 50px;
+    max-width: 112px;
+    max-height: 112px;
+    min-width: 28px;
+    min-height: 28px;
     position: absolute;
 }
 .latestblock img {
