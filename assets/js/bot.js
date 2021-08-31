@@ -116,7 +116,7 @@ client.on('message', (channel, tags, message, self) => {
                 });
 
                 if (!fishTank) {
-                    fadeInOut(jQuery('.latestblock img:first-child'));
+                    fadeInOut($('.latestblock img:first-child'));
                 } else {
                     $('.latestblock img').fadeIn(animationSpeed);
                 }
