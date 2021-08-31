@@ -71,6 +71,18 @@ function formatEmotes(text, emotes) {
     return htmlEntities(splitText).join('')
 }
 
+function fadeInOut(item) {
+    item.fadeIn(animationSpeed).delay(1000).fadeOut(animationSpeed, function () {
+        if (item.next().length) {
+            fadeInOut(item.next());
+        } else {
+            fadeInOut(item.siblings(':first'));
+        }
+        $('.latestblock:first-child').remove();
+    });
+
+}
+
 const client = new tmi.Client({
     connection: {reconnect: true},
     channels: [channelName]
@@ -103,22 +115,14 @@ client.on('message', (channel, tags, message, self) => {
                     left: randomNum + 'px'
                 });
 
+                if (!fishTank) {
+                    fadeInOut(jQuery('.latestblock img:first-child'));
+                } else {
+                    $('.latestblock img').fadeIn(animationSpeed);
+                }
+
             }
         });
-
-        if (!fishTank) {
-
-            $('.latestblock img').fadeIn(animationSpeed);
-
-            $('.latestblock img').fadeOut(animationSpeed, function () {
-                $('.latestblock').remove();
-            });
-
-        } else {
-
-            $('.latestblock img').fadeIn(animationSpeed);
-
-        }
 
     }
 
