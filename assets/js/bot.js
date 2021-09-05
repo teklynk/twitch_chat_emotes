@@ -98,13 +98,11 @@ const client = new tmi.Client({
     channels: [channelName]
 });
 
-client.connect();
+client.connect().catch(console.error);
 
 client.on('message', (channel, tags, message, self) => {
 
     let randomNum = Math.floor((Math.random() * 1000) + 1);
-    //let chatname = `${tags['display-name']}`; // not used since we are not displaying user names
-    //let chatmessage = message.replace(/(<([^>]+)>)/ig, ""); // not used since we are only looking for tags.emotes
     let chatemotes = tags.emotes;
 
     // Ignore echoed messages.
@@ -125,7 +123,7 @@ client.on('message', (channel, tags, message, self) => {
                     left: randomNum + 'px'
                 });
 
-                if (!fishTank) {
+                if (fishTank === 'false' || fishTank === '' || !fishTank) {
                     fadeInOut($('.latestblock img:first-child'));
                 } else {
                     $('.latestblock img').fadeIn(animationSpeed);

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Chat Animated Emotes Overlay</title>
+    <link rel="stylesheet" href="assets/css/bootstrap452.min.css">
+    <link rel="stylesheet" href="assets/css/dark.min.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+</head>
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="h3 pt-4 pl-lg-4 text-center">Twitch Chat Animated Emotes Overlay</h1>
+        </div>
+        <div class="col-2 text-center">
+            <img src="assets/images/robot.gif" style="width: 60px;" alt="">
+        </div>
+    </div>
+    <br>
+    <div class="form-label-group mb-2">
+        <input type="text" id="mainAccount" class="form-control">
+        <label for="mainAccount">
+            <small>Twitch Account</small>
+        </label>
+    </div>
+    <h2>Options</h2>
+    <div class="form-group">
+        <label for="speed">Speed</label>
+        <input type="number" max="20000" min="1000" step="1000" class="form-control" id="speed" value="5000">
+        <small class="form-text text-muted">Speed is in milliseconds. (5000 = 5 seconds)</small>
+    </div>
+    <div class="form-group">
+        <label for="size">Size</label>
+        <select class="form-control" id="size">
+            <option>1</option>
+            <option>2</option>
+            <option selected>3</option>
+        </select>
+        <small class="form-text text-muted">28x28, 56x56, 112x112</small>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="fishtank">
+        <label class="form-check-label" for="fishtank">
+            Fish Tank Mode
+        </label>
+        <small class="form-text text-muted">Emotes will persist on screen until you refresh the browser.</small>
+    </div>
+    <br>
+    <button class="btn btn-lg btn-success btn-block" id="generate_button" type="button">Generate Overlay Link</button>
+    <br>
+    <div id="overlaylink" class="hide"></div>
+</div>
+<script>
+    document.getElementById("generate_button").addEventListener("click", function (e) {
+        let mainAccount = document.getElementById("mainAccount").value;
+        let speed = document.getElementById("speed").value;
+        let size = document.getElementById("size").value;
+        let fishtank = document.getElementById("fishtank").checked;
+        if (!mainAccount) {
+            alert('Twitch username is now set');
+        }
+        //build overlay url
+        if (mainAccount) {
+            document.getElementById("overlaylink").classList.remove("hide");
+            document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
+                "<a href='bot.html?channel=" + mainAccount + "&speed=" + speed + "&size=" + size + "&fishtank=" + fishtank + "' target='_blank'>Overlay URL</a></p>";
+        }
+    });
+</script>
+</body>
+</html>
