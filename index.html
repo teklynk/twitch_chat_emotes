@@ -37,10 +37,8 @@
     </div>
     <br>
     <div class="form-label-group mb-2">
+        <label for="mainAccount">Twitch Account</label>
         <input type="text" id="mainAccount" class="form-control">
-        <label for="mainAccount">
-            <small>Twitch Account</small>
-        </label>
     </div>
     <h2>Options</h2>
     <div class="form-group">
@@ -76,7 +74,7 @@
         let size = document.getElementById("size").value;
         let fishtank = document.getElementById("fishtank").checked;
         if (!mainAccount) {
-            alert('Twitch username is now set');
+            alert('Twitch username is not set');
         }
         //build overlay url
         if (mainAccount) {
