@@ -41,4 +41,4 @@ Just clone or [download](https://github.com/teklynk/twitch_chat_emotes/archive/r
 You can even set /filepath/twitch-chat-emotes/bot.html as the browser source by clicking "Local File" in your OBS browser source properties.
 
 # Try it!
-[https://twitch-chat-emotes.pages.dev/bot?channel=MrStreamer&speed=5000](https://twitch-chat-emotes.pages.dev/bot?channel=MrStreamer&speed=5000)
+[https://twitch-chat-emotes.pages.dev/](https://twitch-chat-emotes.pages.dev/)
