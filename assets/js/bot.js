@@ -9,6 +9,8 @@ let fishTank = getUrlParameter('fishtank');
 
 let emoteSize = getUrlParameter('size');
 
+let customSize = getUrlParameter('customsize');
+
 // default value if size is not set in url
 if (!emoteSize) {
     emoteSize = 3;
@@ -101,6 +103,10 @@ const client = new tmi.Client({
 client.connect().catch(console.error);
 
 client.on('message', (channel, tags, message, self) => {
+
+    if (customSize) {
+        $(".latestblock, .latestblock img").css({'max-width': customSize + 'px', 'max-height': customSize + 'px', 'width': customSize + 'px', 'height': customSize + 'px'});
+    }
 
     let randomNum = Math.floor((Math.random() * 1000) + 1);
     let chatemotes = tags.emotes;
