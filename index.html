@@ -47,13 +47,18 @@
         <small class="form-text text-muted">Speed is in milliseconds. (5000 = 5 seconds)</small>
     </div>
     <div class="form-group">
-        <label for="size">Size</label>
+        <label for="size">Default Sizes</label>
         <select class="form-control" id="size">
             <option value="1">28x28</option>
             <option value="2">56x56</option>
             <option value="3" selected>112x112</option>
         </select>
         <small class="form-text text-muted">28x28, 56x56, 112x112</small>
+    </div>
+    <div class="form-group">
+        <label for="customsize">Custom Size</label>
+        <input type="number" max="600" min="10" step="10" class="form-control" id="customsize" value="">
+        <small class="form-text text-muted">Size is in pixels</small>
     </div>
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="fishtank">
@@ -72,6 +77,7 @@
         let mainAccount = document.getElementById("mainAccount").value;
         let speed = document.getElementById("speed").value;
         let size = document.getElementById("size").value;
+        let customsize = document.getElementById("customsize").value;
         let fishtank = document.getElementById("fishtank").checked;
         if (!mainAccount) {
             alert('Twitch username is not set');
@@ -80,7 +86,7 @@
         if (mainAccount) {
             document.getElementById("overlaylink").classList.remove("hide");
             document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
-                "<a href='bot.html?channel=" + mainAccount + "&speed=" + speed + "&size=" + size + "&fishtank=" + fishtank + "' target='_blank'>Overlay URL</a></p>";
+                "<a href='bot.html?channel=" + mainAccount + "&speed=" + speed + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank + "' target='_blank'>Overlay URL</a></p>";
         }
     });
 </script>
