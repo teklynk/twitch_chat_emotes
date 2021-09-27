@@ -13,10 +13,12 @@
 
 * Twitch emotes come in 3 different sizes. 28x28, 56x56, 112x112. Default is 3 (112x112). Changing this can help performance. 
 
-***fishtank***=true
+***fishtank***=true/false
 
 * if **fishtank=true**, emotes will persist on screen until you refresh the browser source in OBS. 
 You can refresh the browser source by clicking "Refresh cache of current page" in the browser source properties.
+
+***customsize***=pixel size 
 
 http://example.com/bot.html?channel=MrStreamer&speed=5000&size=3&fishtank=true
 
@@ -34,7 +36,25 @@ http://example.com/bot.html?channel=MrStreamer&speed=5000&size=3&fishtank=true
 
 * Try to avoid using a speed less than 5000 (5 seconds)
 
-## **Setup:**
+### Modify the CSS by adding this to the CSS section in your OBS browser source.
+```
+#container {
+    width: 1920px;
+    height: 1080px;
+    padding: 0;
+    margin: 0;
+}
+
+.latestblock,
+.latestblock img {
+    max-width: 112px;
+    max-height: 112px;
+    min-width: 28px;
+    min-height: 28px;
+}
+```
+
+# Setup:
 
 Just clone or [download](https://github.com/teklynk/twitch_chat_emotes/archive/refs/heads/master.zip) the repo and open "bot.html" in your browser. **No web server needed!** Everything runs client-side using plain old javascript, html and css.
 
