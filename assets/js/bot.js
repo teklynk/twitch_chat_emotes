@@ -12,6 +12,8 @@ let emoteSize = getUrlParameter('size');
 let customSize = getUrlParameter('customsize');
 customSize = parseInt(customSize);
 
+let botUser = getUrlParameter('bot');
+
 // default value if size is not set in url
 if (!emoteSize) {
     emoteSize = 3;
@@ -105,82 +107,93 @@ client.connect().catch(console.error);
 
 client.on('message', (channel, tags, message, self) => {
 
-    let randomNum = Math.floor((Math.random() * 1000) + 1);
-    let chatemotes = tags.emotes;
+    let username = `${tags.username}`;
 
-    // Ignore echoed messages.
-    if (self) return;
+    if (botUser === username) {
+        doEmotes();
+    } else if (botUser === '') {
+        doEmotes();
+    }
 
-    let chatEmote = formatEmotes('', chatemotes);
+    function doEmotes() {
+        let randomNum = Math.floor((Math.random() * 1000) + 1);
+        let chatemotes = tags.emotes;
 
-    let chatEmoteArr = chatEmote.split(',');
-    chatEmoteArr = chatEmoteArr.filter(Boolean);
+        // Ignore echoed messages.
+        if (self) return;
 
-    if (chatEmoteArr.length !== 0) {
+        let chatEmote = formatEmotes('', chatemotes);
 
-        $.each(chatEmoteArr, function (key, value) {
-            if (value !== "" || value !== null) {
+        let chatEmoteArr = chatEmote.split(',');
+        chatEmoteArr = chatEmoteArr.filter(Boolean);
 
-                $("<div class='latestblock'><img src=" + value + " /></div>").appendTo("#container").css({
-                    top: randomNum + 'px',
-                    left: randomNum + 'px'
-                });
+        if (chatEmoteArr.length !== 0) {
 
-                if (fishTank === 'false' || fishTank === '' || !fishTank) {
-                    fadeInOut($('.latestblock img:first-child'));
-                } else {
-                    $('.latestblock img').fadeIn(animationSpeed);
+            $.each(chatEmoteArr, function (key, value) {
+                if (value !== "" || value !== null) {
+
+                    $("<div class='latestblock'><img src=" + value + " /></div>").appendTo("#container").css({
+                        top: randomNum + 'px',
+                        left: randomNum + 'px'
+                    });
+
+                    if (fishTank === 'false' || fishTank === '' || !fishTank) {
+                        fadeInOut($('.latestblock img:first-child'));
+                    } else {
+                        $('.latestblock img').fadeIn(animationSpeed);
+                    }
+
                 }
+            });
 
-            }
+        }
+
+        //do this after dom latestblock have been created
+        if (customSize) {
+            $(".latestblock, .latestblock img").css({'max-width': customSize + 'px', 'max-height': customSize + 'px', 'width': customSize + 'px', 'height': customSize + 'px'});
+        }
+
+        function randomFromTo(from, to) {
+            return Math.floor(Math.random() * (to - from + 1) + from);
+        }
+
+        function moveRandom(obj) {
+            /* get container position and size
+             * -- access method : cPos.top and cPos.left */
+            var cPos = $('#container').offset();
+            var cHeight = $('#container').height();
+            var cWidth = $('#container').width();
+
+            // get box padding (assume all padding have same value)
+            var pad = parseInt($('#container').css('padding-top').replace('px', ''));
+
+            // get movable box size
+            var bHeight = obj.height();
+            var bWidth = obj.width();
+
+            // set maximum position
+            maxY = cPos.top + cHeight - bHeight - pad;
+            maxX = cPos.left + cWidth - bWidth - pad;
+
+            // set minimum position
+            minY = cPos.top + pad;
+            minX = cPos.left + pad;
+
+            // set new position
+            newY = randomFromTo(minY, maxY);
+            newX = randomFromTo(minX, maxX);
+
+            obj.animate({
+                top: newY,
+                left: newX
+            }, animationSpeed, function () {
+                moveRandom(obj);
+            });
+        }
+
+        $('.latestblock').each(function () {
+            moveRandom($(this));
         });
-
     }
 
-    //do this after dom latestblock have been created
-    if (customSize) {
-        $(".latestblock, .latestblock img").css({'max-width': customSize + 'px', 'max-height': customSize + 'px', 'width': customSize + 'px', 'height': customSize + 'px'});
-    }
-
-    function randomFromTo(from, to) {
-        return Math.floor(Math.random() * (to - from + 1) + from);
-    }
-
-    function moveRandom(obj) {
-        /* get container position and size
-         * -- access method : cPos.top and cPos.left */
-        var cPos = $('#container').offset();
-        var cHeight = $('#container').height();
-        var cWidth = $('#container').width();
-
-        // get box padding (assume all padding have same value)
-        var pad = parseInt($('#container').css('padding-top').replace('px', ''));
-
-        // get movable box size
-        var bHeight = obj.height();
-        var bWidth = obj.width();
-
-        // set maximum position
-        maxY = cPos.top + cHeight - bHeight - pad;
-        maxX = cPos.left + cWidth - bWidth - pad;
-
-        // set minimum position
-        minY = cPos.top + pad;
-        minX = cPos.left + pad;
-
-        // set new position
-        newY = randomFromTo(minY, maxY);
-        newX = randomFromTo(minX, maxX);
-
-        obj.animate({
-            top: newY,
-            left: newX
-        }, animationSpeed, function () {
-            moveRandom(obj);
-        });
-    }
-
-    $('.latestblock').each(function () {
-        moveRandom($(this));
-    });
 });
