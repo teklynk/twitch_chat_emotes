@@ -32,6 +32,13 @@ if (!animationSpeed) {
 // convert animationSpeed string to integer
 animationSpeed = parseInt(animationSpeed);
 
+let duration = getUrlParameter('duration');
+duration = parseInt(duration);
+
+if (!duration) {
+    duration = 5000;
+}
+
 let channelName = getUrlParameter('channel');
 
 if (channelName === '') {
@@ -87,7 +94,7 @@ function formatEmotes(text, emotes) {
 }
 
 function fadeInOut(item) {
-    item.fadeIn(animationSpeed).delay(1000).fadeOut(animationSpeed, function () {
+    item.fadeIn(1000).delay(duration).fadeOut(1000, function () {
         if (item.next().length) {
             fadeInOut(item.next());
         } else {

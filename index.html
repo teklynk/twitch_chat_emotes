@@ -43,8 +43,13 @@
     <h2>Options</h2>
     <div class="form-group">
         <label for="speed">Speed</label>
-        <input type="number" max="20000" min="1000" step="1000" class="form-control" id="speed" value="5000">
+        <input type="number" max="3600000" min="1000" step="1000" class="form-control" id="speed" value="5000">
         <small class="form-text text-muted">Speed is in milliseconds. (5000 = 5 seconds)</small>
+    </div>
+    <div class="form-group">
+        <label for="duration">Duration</label>
+        <input type="number" max="3600000" min="1000" step="1000" class="form-control" id="duration" value="5000">
+        <small class="form-text text-muted">Duration is in milliseconds. (5000 = 5 seconds)</small>
     </div>
     <div class="form-group">
         <label for="size">Default Sizes</label>
@@ -75,6 +80,7 @@
 <script>
     document.getElementById("generate_button").addEventListener("click", function (e) {
         let mainAccount = document.getElementById("mainAccount").value;
+        let duration = document.getElementById("duration").value;
         let speed = document.getElementById("speed").value;
         let size = document.getElementById("size").value;
         let customsize = document.getElementById("customsize").value;
@@ -85,7 +91,7 @@
         //build overlay url
         if (mainAccount) {
             let srcURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&speed=" + speed + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank;
+            let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank;
             document.getElementById("overlaylink").classList.remove("hide");
             document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
                 "<a href='" + fullUrl + "' target='_blank'>" + fullUrl + "</a></p>";
