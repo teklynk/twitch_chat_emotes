@@ -117,9 +117,9 @@ client.on('message', (channel, tags, message, self) => {
     let username = `${tags.username}`;
 
     if (botUser === username) {
-        doEmotes();
+        doEmotes(); // bot user only
     } else if (botUser === '') {
-        doEmotes();
+        doEmotes(); // all users
     }
 
     function doEmotes() {

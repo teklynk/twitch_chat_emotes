@@ -40,6 +40,11 @@
         <label for="mainAccount">Twitch Account</label>
         <input type="text" id="mainAccount" class="form-control">
     </div>
+    <div class="form-label-group mb-2">
+        <label for="botAccount">Bot Account <small>(optional)</small></label>
+        <input type="text" id="botAccount" class="form-control">
+        <small class="form-text text-muted">If set, this will only display emotes from the bot account/user. This can also be set to use your main Twitch account/user. Great for alerts that use a bot account.</small>
+    </div>
     <h2>Options</h2>
     <div class="form-group">
         <label for="speed">Speed</label>
@@ -70,7 +75,7 @@
         <label class="form-check-label" for="fishtank">
             Fish Tank Mode
         </label>
-        <small class="form-text text-muted">Emotes will persist on screen until you refresh the browser.</small>
+        <small class="form-text text-muted">Emotes will persist on screen until you refresh the browser source.</small>
     </div>
     <br>
     <button class="btn btn-lg btn-success btn-block" id="generate_button" type="button">Generate Overlay Link</button>
@@ -80,6 +85,7 @@
 <script>
     document.getElementById("generate_button").addEventListener("click", function (e) {
         let mainAccount = document.getElementById("mainAccount").value;
+        let botAccount = document.getElementById("botAccount").value;
         let duration = document.getElementById("duration").value;
         let speed = document.getElementById("speed").value;
         let size = document.getElementById("size").value;
@@ -91,7 +97,7 @@
         //build overlay url
         if (mainAccount) {
             let srcURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank;
+            let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank;
             document.getElementById("overlaylink").classList.remove("hide");
             document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
                 "<a href='" + fullUrl + "' target='_blank'>" + fullUrl + "</a></p>";
