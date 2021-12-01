@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Chat Animated Emotes Overlay</title>
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="assets/css/bootstrap452.min.css">
     <link rel="stylesheet" href="assets/css/dark.min.css">
     <link rel="apple-touch-icon" sizes="57x57" href="assets/images/apple-icon-57x57.png">
@@ -43,18 +44,22 @@
     <div class="form-label-group mb-2">
         <label for="botAccount">Bot Account <small>(optional)</small></label>
         <input type="text" id="botAccount" class="form-control">
-        <small class="form-text text-muted">If set, this will only display emotes from the bot account/user. This can also be set to use your main Twitch account/user. Great for alerts that use a bot account.</small>
+        <small class="form-text text-muted">If set, this will only display emotes from the bot account/user. This can
+            also be set to use your main Twitch account/user. Great for alerts that use a bot account.</small>
     </div>
+    <hr>
     <h2>Options</h2>
-    <div class="form-group">
+    <div class="form-group range-slider">
         <label for="speed">Speed</label>
-        <input type="number" max="3600000" min="1000" step="1000" class="form-control" id="speed" value="5000">
-        <small class="form-text text-muted">Speed is in milliseconds. (5000 = 5 seconds)</small>
+        <input type="range" max="50" min="1" step="1" class="form-control range-slider-range" id="speed"
+               value="5" style="height: 0;">
+        <small class="text-muted range-slider-value"></small><small class="text-muted range-slider-value">&nbsp;Seconds</small>
     </div>
-    <div class="form-group">
+    <div class="form-group range-slider">
         <label for="duration">Duration</label>
-        <input type="number" max="3600000" min="1000" step="1000" class="form-control" id="duration" value="5000">
-        <small class="form-text text-muted">Duration is in milliseconds. (5000 = 5 seconds)</small>
+        <input type="range" max="3600" min="1" step="1" class="form-control range-slider-range" id="duration"
+               value="15" style="height: 0;">
+        <small class="text-muted range-slider-value"></small><small class="text-muted range-slider-value">&nbsp;Seconds</small>
     </div>
     <div class="form-group">
         <label for="size">Default Sizes</label>
@@ -83,27 +88,52 @@
     <div id="overlaylink" class="hide"></div>
 </div>
 <script>
-    document.getElementById("generate_button").addEventListener("click", function (e) {
-        let mainAccount = document.getElementById("mainAccount").value;
-        let botAccount = document.getElementById("botAccount").value;
-        let duration = document.getElementById("duration").value;
-        let speed = document.getElementById("speed").value;
-        let size = document.getElementById("size").value;
-        let customsize = document.getElementById("customsize").value;
-        let fishtank = document.getElementById("fishtank").checked;
-        if (!mainAccount) {
-            alert('Twitch username is not set');
-        }
-        //build overlay url
-        if (mainAccount) {
-            let srcURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank;
-            document.getElementById("overlaylink").classList.remove("hide");
-            document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
-                "<a href='" + fullUrl + "' target='_blank'>" + fullUrl + "</a></p>";
-        }
+    $(document).ready(function () {
+        let rangeSlider = function rangeSlider() {
+            let slider = $('.range-slider'),
+                range = $('.range-slider-range'),
+                value = $('.range-slider-value');
+
+            slider.each(function () {
+
+                value.each(function () {
+                    let value = $(this).prev().attr('value');
+                    $(this).html(value);
+                });
+
+                range.on('input', function () {
+                    $(this).next(value).html(this.value);
+                });
+            });
+        };
+
+        rangeSlider();
+
+        document.getElementById("generate_button").addEventListener("click", function (e) {
+            let mainAccount = document.getElementById("mainAccount").value;
+            let botAccount = document.getElementById("botAccount").value;
+            let duration = document.getElementById("duration").value;
+            duration = duration + '000'; // convert seconds to milliseconds
+            let speed = document.getElementById("speed").value;
+            speed = speed + '000'; // convert seconds to milliseconds
+            let size = document.getElementById("size").value;
+            let customsize = document.getElementById("customsize").value;
+            let fishtank = document.getElementById("fishtank").checked;
+            if (!mainAccount) {
+                alert('Twitch username is not set');
+            }
+            //build overlay url
+            if (mainAccount) {
+                let srcURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank;
+                document.getElementById("overlaylink").classList.remove("hide");
+                document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
+                    "<a href='" + fullUrl + "' target='_blank'>" + fullUrl + "</a></p>";
+            }
+        });
     });
 </script>
-<div class="text-right m-4"><a class="btn btn-link" href="https://github.com/teklynk/twitch_chat_emotes" target="_blank">Github</a></div>
+<div class="text-right m-4"><a class="btn btn-link" href="https://github.com/teklynk/twitch_chat_emotes"
+                               target="_blank">Github</a></div>
 </body>
 </html>
