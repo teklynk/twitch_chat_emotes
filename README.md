@@ -22,8 +22,6 @@ can help performance.
 ***fishtank***=true/false If **fishtank=true**, emotes will persist on screen until you refresh the browser source in
 OBS. You can refresh the browser source by clicking "Refresh cache of current page" in the browser source properties.
 
-***customsize***=pixel size
-
 http://example.com/bot.html?channel=MrStreamer&speed=5000&size=3&fishtank=true
 
 # Example Videos
