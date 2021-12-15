@@ -1,24 +1,28 @@
 # Twitch chat emotes animated overlay
 
 # Meat of the project
+
 [bot.js](https://raw.githubusercontent.com/teklynk/twitch_chat_emotes/master/assets/js/bot.js)
 
 # URL parameters
 
-***speed***=transition speed, as well as fade-in/fade-out speed
+***speed***=transition speed, as well as fade-in/fade-out speed (milliseconds value. 5000 = 5 seconds)
+
+***duration***=how long the emotes stay on screen (milliseconds value. 5000 = 5 seconds)
 
 ***channel***=your main twitch channel
 
-***size***=1,2,3
+***bot***=If set, this will only display emotes from the bot account/user. Great for alerts that use a bot account.
 
-* Twitch emotes come in 3 different sizes. 28x28, 56x56, 112x112. Default is 3 (112x112). Changing this can help performance. 
+***size***=1,2,3 Twitch emotes come in 3 different sizes. 28x28, 56x56, 112x112. Default is 3 (112x112). Changing this
+can help performance.
 
-***fishtank***=true/false
+***customsize***=pixel value. (ie: 200 = 200px)
 
-* if **fishtank=true**, emotes will persist on screen until you refresh the browser source in OBS. 
-You can refresh the browser source by clicking "Refresh cache of current page" in the browser source properties.
+***fishtank***=true/false If **fishtank=true**, emotes will persist on screen until you refresh the browser source in
+OBS. You can refresh the browser source by clicking "Refresh cache of current page" in the browser source properties.
 
-***customsize***=pixel size 
+***customsize***=pixel size
 
 http://example.com/bot.html?channel=MrStreamer&speed=5000&size=3&fishtank=true
 
