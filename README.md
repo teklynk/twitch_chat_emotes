@@ -6,13 +6,17 @@ This is a Twitch OBS overlay that displays emotes from Twitch chat. Emotes fly a
 pile up. Tested with 1000 emotes on screen at the same time. Emotes first appear from a random location on the screen
 and randomly move across the screen.
 
-## Example Videos
+## Examples
+
+Standard mode with fade in and fade out
 
 ![Standard Mode](https://github.com/teklynk/twitch_chat_emotes/blob/master/sample_standard.gif?raw=true "Standard Mode")
 
+Fish tank mode (Emote wall)
+
 ![Fishtank Mode](https://github.com/teklynk/twitch_chat_emotes/blob/master/sample_fishtank.gif?raw=true "Fishtank Mode")
 
-### Try it!
+## Try it!
 
 [https://twitch-chat-emotes.pages.dev/](https://twitch-chat-emotes.pages.dev/)
 
