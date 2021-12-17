@@ -73,8 +73,9 @@ http://example.com/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&
 # Setup:
 
 Just clone or [download](https://github.com/teklynk/twitch_chat_emotes/archive/refs/heads/master.zip) the repo and
-open "bot.html" in your browser. **No web server needed!** Everything runs client-side using plain old javascript, html
-and css.
+open **"bot.html"** in your browser. **No web server needed!** Everything runs client-side using plain old javascript,
+html and css.
 
-You can even set /filepath/twitch-chat-emotes/bot.html as the browser source by clicking "Local File" in your OBS
-browser source properties.
+You can even set **"
+/filepath/twitch-chat-emotes/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&customsize=150&fishtank=false"**
+as the browser source by clicking "Local File" in your OBS browser source properties.
