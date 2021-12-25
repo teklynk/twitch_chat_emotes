@@ -51,6 +51,8 @@ http://example.com/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&
 
 * Try to avoid using a speed less than 5000 (5 seconds)
 
+* You can set the browser source frame-rate from 30 to 60 if the animation seems to stutter.
+
 ### Modify the CSS by adding this to the CSS section in your OBS browser source.
 
 ```
@@ -76,6 +78,5 @@ Just clone or [download](https://github.com/teklynk/twitch_chat_emotes/archive/r
 open **"bot.html"** in your browser. **No web server needed!** Everything runs client-side using plain old javascript,
 html and css.
 
-You can even set **"
-/filepath/twitch-chat-emotes/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&customsize=150&fishtank=false"**
+You can even set **"/filepath/twitch-chat-emotes/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&customsize=150&fishtank=false"**
 as the browser source by clicking "Local File" in your OBS browser source properties.
