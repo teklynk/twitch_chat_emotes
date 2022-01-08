@@ -7,6 +7,12 @@ function getUrlParameter(name) {
 
 let fishTank = getUrlParameter('fishtank');
 
+let effect = getUrlParameter('effect');
+
+if (!effect) {
+    effect = 'default';
+}
+
 let emoteSize = getUrlParameter('size');
 
 let customSize = getUrlParameter('customsize');
@@ -78,7 +84,7 @@ function formatEmotes(text, emotes) {
         let e = emotes[i];
         for (let j in e) {
             let mote = e[j];
-            if (typeof mote == 'string') {
+            if (typeof mote === 'string') {
                 mote = mote.split('-');
                 mote = [parseInt(mote[0]), parseInt(mote[1])];
                 let length = mote[1] - mote[0],
@@ -103,6 +109,18 @@ function fadeInOut(item) {
         $('.latestblock:first-child').remove();
     });
 
+}
+
+function arrayPlusDelay(array, delegate, delay) {
+    // initialize all calls right away
+    array.forEach(function (el, i) {
+        setTimeout(function () {
+            // each loop, call passed in function
+            delegate(array[i]);
+
+            // stagger the timeout for each loop by the index
+        }, i * delay);
+    })
 }
 
 const client = new tmi.Client({
@@ -136,13 +154,25 @@ client.on('message', (channel, tags, message, self) => {
 
         if (chatEmoteArr.length !== 0) {
 
+            if (effect === 'bounce') {
+                arrayPlusDelay(chatEmoteArr, function (value) {
+
+                    $("<div class='latestblock x'><img src=" + value + " class='y'/></div>").appendTo("#container");
+
+                    $('.latestblock img').fadeIn(animationSpeed);
+
+                }, randomFromTo(1000, 3000));
+            }
+
             $.each(chatEmoteArr, function (key, value) {
                 if (value !== "" || value !== null) {
 
-                    $("<div class='latestblock'><img src=" + value + " /></div>").appendTo("#container").css({
-                        top: randomNum + 'px',
-                        left: randomNum + 'px'
-                    });
+                    if (effect === 'default') {
+                        $("<div class='latestblock'><img src=" + value + " /></div>").appendTo("#container").css({
+                            top: randomNum + 'px',
+                            left: randomNum + 'px'
+                        });
+                    }
 
                     if (fishTank === 'false' || fishTank === '' || !fishTank) {
                         fadeInOut($('.latestblock img:first-child'));
@@ -179,16 +209,16 @@ client.on('message', (channel, tags, message, self) => {
             var bWidth = obj.width();
 
             // set maximum position
-            maxY = cPos.top + cHeight - bHeight - pad;
-            maxX = cPos.left + cWidth - bWidth - pad;
+            var maxY = cPos.top + cHeight - bHeight - pad;
+            var maxX = cPos.left + cWidth - bWidth - pad;
 
             // set minimum position
-            minY = cPos.top + pad;
-            minX = cPos.left + pad;
+            var minY = cPos.top + pad;
+            var minX = cPos.left + pad;
 
             // set new position
-            newY = randomFromTo(minY, maxY);
-            newX = randomFromTo(minX, maxX);
+            var newY = randomFromTo(minY, maxY);
+            var newX = randomFromTo(minX, maxX);
 
             obj.animate({
                 top: newY,
@@ -198,9 +228,12 @@ client.on('message', (channel, tags, message, self) => {
             });
         }
 
-        $('.latestblock').each(function () {
-            moveRandom($(this));
-        });
+        if (effect === 'default') {
+            $('.latestblock').each(function () {
+                moveRandom($(this));
+            });
+        }
+
     }
 
 });
