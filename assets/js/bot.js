@@ -14,6 +14,12 @@ customSize = parseInt(customSize);
 
 let botUser = getUrlParameter('bot');
 
+let effect = getUrlParameter('effect');
+
+if (!effect) {
+    effect = '';
+}
+
 // default value if size is not set in url
 if (!emoteSize) {
     emoteSize = 3;
@@ -139,7 +145,7 @@ client.on('message', (channel, tags, message, self) => {
             $.each(chatEmoteArr, function (key, value) {
                 if (value !== "" || value !== null) {
 
-                    $("<div class='latestblock'><img src=" + value + " /></div>").appendTo("#container").css({
+                    $("<div class='latestblock'><img src='" + value + "' class='" + effect + "' /></div>").appendTo("#container").css({
                         top: randomNum + 'px',
                         left: randomNum + 'px'
                     });
