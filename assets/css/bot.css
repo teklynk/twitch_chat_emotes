@@ -35,7 +35,7 @@ body {
 }
 
 .latestblock img.rotate {
-    animation: rotate 6s linear infinite;
+    animation: rotate 6s alternate ease-in-out infinite;
 }
 
 @keyframes grow {
