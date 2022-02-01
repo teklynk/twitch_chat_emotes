@@ -38,6 +38,10 @@ body {
     animation: rotate 6s alternate ease-in-out infinite;
 }
 
+.latestblock img.skew {
+    animation: skew 3s alternate ease-in-out infinite;
+}
+
 @keyframes grow {
   from {
     transform: scale(0);
@@ -62,5 +66,16 @@ body {
     }
     to {
         transform: rotate(360deg);
+    }
+}
+
+@keyframes skew {
+    from {
+
+        transform: matrix(1, 0, 0.5, 1, 150, 0);
+    }
+    to {
+
+        transform: matrix(1, -0.3, 0, 1, 0, 0);
     }
 }
