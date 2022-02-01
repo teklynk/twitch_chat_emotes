@@ -36,7 +36,7 @@ can help performance.
 
 ***customsize***=pixel value. (ie: 200 = 200px)
 
-***effect***=animation effect (grow). Default is fade in-out
+***effect***=animation effect (grow, rotate). Default is fade in-out
 
 ***fishtank***=true/false If **fishtank=true**, emotes will persist on screen until you refresh the browser source in
 OBS. You can refresh the browser source by clicking "Refresh cache of current page" in the browser source properties.

@@ -27,11 +27,15 @@ body {
 
 /* Effects */
 .latestblock img.grow {
-    animation: grow 2s;
+    animation: grow 3s;
 }
 
 .latestblock img.shrink {
-    animation: shrink 2s;
+    animation: shrink 3s;
+}
+
+.latestblock img.rotate {
+    animation: rotate 6s linear infinite;
 }
 
 @keyframes grow {
@@ -49,5 +53,14 @@ body {
     }
     to {
         transform: scale(0);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }
