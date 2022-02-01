@@ -84,7 +84,7 @@ function formatEmotes(text, emotes) {
         let e = emotes[i];
         for (let j in e) {
             let mote = e[j];
-            if (typeof mote == 'string') {
+            if (typeof mote === 'string') {
                 mote = mote.split('-');
                 mote = [parseInt(mote[0]), parseInt(mote[1])];
                 let length = mote[1] - mote[0],
@@ -112,6 +112,10 @@ function fadeInOut(item) {
 }
 
 const client = new tmi.Client({
+    options: {
+        debug: true,
+        skipUpdatingEmotesets: true
+    },
     connection: {reconnect: true},
     channels: [channelName]
 });
@@ -145,6 +149,7 @@ client.on('message', (channel, tags, message, self) => {
             $.each(chatEmoteArr, function (key, value) {
                 if (value !== "" || value !== null) {
 
+                    // randomize location
                     $("<div class='latestblock'><img src='" + value + "' class='" + effect + "' /></div>").appendTo("#container").css({
                         top: randomNum + 'px',
                         left: randomNum + 'px'
@@ -173,16 +178,16 @@ client.on('message', (channel, tags, message, self) => {
         function moveRandom(obj) {
             /* get container position and size
              * -- access method : cPos.top and cPos.left */
-            var cPos = $('#container').offset();
-            var cHeight = $('#container').height();
-            var cWidth = $('#container').width();
+            let cPos = $('#container').offset();
+            let cHeight = $('#container').height();
+            let cWidth = $('#container').width();
 
             // get box padding (assume all padding have same value)
-            var pad = parseInt($('#container').css('padding-top').replace('px', ''));
+            let pad = parseInt($('#container').css('padding-top').replace('px', ''));
 
             // get movable box size
-            var bHeight = obj.height();
-            var bWidth = obj.width();
+            let bHeight = obj.height();
+            let bWidth = obj.width();
 
             // set maximum position
             maxY = cPos.top + cHeight - bHeight - pad;
