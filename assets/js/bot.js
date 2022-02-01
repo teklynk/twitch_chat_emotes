@@ -100,7 +100,7 @@ function formatEmotes(text, emotes) {
 }
 
 function fadeInOut(item) {
-    item.fadeIn(1000).delay(duration).fadeOut(1000, function () {
+    item.fadeIn(2000).delay(duration).fadeOut(2000, function () {
         if (item.next().length) {
             fadeInOut(item.next());
         } else {
@@ -108,7 +108,6 @@ function fadeInOut(item) {
         }
         $('.latestblock:first-child').remove();
     });
-
 }
 
 const client = new tmi.Client({
@@ -150,10 +149,14 @@ client.on('message', (channel, tags, message, self) => {
                 if (value !== "" || value !== null) {
 
                     // randomize location
-                    $("<div class='latestblock'><img src='" + value + "' class='" + effect + "' /></div>").appendTo("#container").css({
+                    $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
                         top: randomNum + 'px',
                         left: randomNum + 'px'
                     });
+
+                    if (effect) {
+                        $('.latestblock img:first-child').addClass(effect);
+                    }
 
                     if (fishTank === 'false' || fishTank === '' || !fishTank) {
                         fadeInOut($('.latestblock img:first-child'));
@@ -168,7 +171,12 @@ client.on('message', (channel, tags, message, self) => {
 
         //do this after dom latestblock have been created
         if (customSize) {
-            $(".latestblock, .latestblock img").css({'max-width': customSize + 'px', 'max-height': customSize + 'px', 'width': customSize + 'px', 'height': customSize + 'px'});
+            $(".latestblock, .latestblock img").css({
+                'max-width': customSize + 'px',
+                'max-height': customSize + 'px',
+                'width': customSize + 'px',
+                'height': customSize + 'px'
+            });
         }
 
         function randomFromTo(from, to) {

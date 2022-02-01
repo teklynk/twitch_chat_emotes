@@ -75,6 +75,13 @@
         <input type="number" max="600" min="10" step="10" class="form-control" id="customsize" value="">
         <small class="form-text text-muted">Size is in pixels</small>
     </div>
+    <div class="form-group">
+        <label for="effect">Effects</label>
+        <select class="form-control" id="effect">
+            <option value="">Fade</option>
+            <option value="grow">Grow</option>
+        </select>
+    </div>
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="fishtank">
         <label class="form-check-label" for="fishtank">
@@ -117,6 +124,7 @@
             let speed = document.getElementById("speed").value;
             speed = speed + '000'; // convert seconds to milliseconds
             let size = document.getElementById("size").value;
+            let effect = document.getElementById("effect").value;
             let customsize = document.getElementById("customsize").value;
             let fishtank = document.getElementById("fishtank").checked;
             if (!mainAccount) {
@@ -125,7 +133,7 @@
             //build overlay url
             if (mainAccount) {
                 let srcURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank;
+                let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank + "&effect=" + effect;
                 document.getElementById("overlaylink").classList.remove("hide");
                 document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
                     "<a href='" + fullUrl + "' target='_blank'>" + fullUrl + "</a></p>";

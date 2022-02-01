@@ -30,6 +30,10 @@ body {
     animation: grow 2s;
 }
 
+.latestblock img.shrink {
+    animation: shrink 2s;
+}
+
 @keyframes grow {
   from {
     transform: scale(0);
@@ -37,4 +41,13 @@ body {
   to {
     transform: scale(1);
   }
+}
+
+@keyframes shrink {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(0);
+    }
 }
