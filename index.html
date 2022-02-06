@@ -136,6 +136,7 @@
             if (mainAccount) {
                 let srcURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
                 let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank + "&effect=" + effect;
+                fullUrl = fullUrl.replace("index.htmlbot.html", "bot.html");
                 document.getElementById("overlaylink").classList.remove("hide");
                 document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
                     "<a href='" + fullUrl + "' target='_blank'>" + fullUrl + "</a></p>";
