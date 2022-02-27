@@ -127,6 +127,11 @@
 
         rangeSlider();
 
+        // Check if any input fields have changed
+        $(":text,textarea,:checkbox,input[type=range]").on('change', function (e) {
+            $("#overlaylink").addClass("hide");
+        });
+
         document.getElementById("generate_button").addEventListener("click", function (e) {
             let mainAccount = document.getElementById("mainAccount").value;
             let botAccount = document.getElementById("botAccount").value;
