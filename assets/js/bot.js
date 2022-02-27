@@ -51,6 +51,12 @@ if (channelName === '') {
     alert('Channel name is missing. Set ?channel=yourTwitchChannel in the URL and reload the browser');
 }
 
+let emoteLimit = getUrlParameter('emoteLimit');
+
+if (!emoteLimit) {
+    emoteLimit = 50;
+}
+
 function htmlEntities(html) {
     function it() {
         return html.map(function (n, i, arr) {
@@ -140,12 +146,19 @@ client.on('message', (channel, tags, message, self) => {
 
         let chatEmote = formatEmotes('', chatemotes);
 
+        // Create emotes array
         let chatEmoteArr = chatEmote.split(',');
         chatEmoteArr = chatEmoteArr.filter(Boolean);
 
-        if (chatEmoteArr.length !== 0) {
+        // Set a limit on how many emotes can be displayed from each message
+        let limitedEmoteArr = chatEmoteArr.filter((val, i) => i < parseInt(emoteLimit) - 1);
 
-            $.each(chatEmoteArr, function (key, value) {
+        // Debugging
+        console.log(limitedEmoteArr);
+
+        if (limitedEmoteArr.length !== 0) {
+
+            $.each(limitedEmoteArr, function (key, value) {
                 if (value !== "" || value !== null) {
 
                     // randomize location

@@ -22,6 +22,8 @@ Fish tank mode (Emote wall)
 
 ## URL parameters
 
+***emoteLimit***=Max number of emotes to show from each message. (Good for limiting emote spamming or emotes only mode). Default is 50.
+
 ***speed***=transition speed, as well as fade-in/fade-out speed (milliseconds value. 5000 = 5 seconds)
 
 ***duration***=how long the emotes stay on screen (milliseconds value. 5000 = 5 seconds)

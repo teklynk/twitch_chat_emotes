@@ -50,6 +50,13 @@
     <hr>
     <h2>Options</h2>
     <div class="form-group range-slider">
+        <label for="emoteLimit">Limit</label>
+        <input type="range" max="100" min="1" step="1" class="form-control range-slider-range" id="emoteLimit"
+               value="50" style="height: 0;">
+        <small class="text-muted range-slider-value"></small>
+        <small class="text-muted range-slider-value">&nbsp;Emotes</small>
+    </div>
+    <div class="form-group range-slider">
         <label for="speed">Speed</label>
         <input type="range" max="50" min="1" step="1" class="form-control range-slider-range" id="speed"
                value="5" style="height: 0;">
@@ -129,13 +136,14 @@
             let effect = document.getElementById("effect").value;
             let customsize = document.getElementById("customsize").value;
             let fishtank = document.getElementById("fishtank").checked;
+            let emoteLimit = document.getElementById("emoteLimit").value;
             if (!mainAccount) {
                 alert('Twitch username is not set');
             }
             //build overlay url
             if (mainAccount) {
                 let srcURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank + "&effect=" + effect;
+                let fullUrl = srcURL + "bot.html?channel=" + mainAccount + "&bot=" + botAccount + "&speed=" + speed + "&duration=" + duration + "&size=" + size + "&customsize=" + customsize + "&fishtank=" + fishtank + "&effect=" + effect + "&emoteLimit=" + emoteLimit;
                 fullUrl = fullUrl.replace("index.htmlbot.html", "bot.html");
                 document.getElementById("overlaylink").classList.remove("hide");
                 document.getElementById("overlaylink").innerHTML = "<p>Add this link as a browser source in OBS. Set width to 1920x1080.<br>" +
