@@ -151,10 +151,10 @@ client.on('message', (channel, tags, message, self) => {
         chatEmoteArr = chatEmoteArr.filter(Boolean);
 
         // Set a limit on how many emotes can be displayed from each message
-        let limitedEmoteArr = chatEmoteArr.filter((val, i) => i < parseInt(emoteLimit) - 1);
+        let limitedEmoteArr = chatEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
 
         // Debugging
-        console.log(limitedEmoteArr);
+        //console.log(limitedEmoteArr);
 
         if (limitedEmoteArr.length !== 0) {
 
