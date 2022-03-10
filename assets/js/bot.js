@@ -183,7 +183,7 @@ client.on('message', (channel, tags, message, self) => {
         }
 
         //do this after dom latestblock have been created
-        if (customSize) {
+        if (customSize > 0) {
             $(".latestblock, .latestblock img").css({
                 'max-width': customSize + 'px',
                 'max-height': customSize + 'px',

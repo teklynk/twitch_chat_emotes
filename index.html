@@ -79,11 +79,17 @@
         </select>
         <small class="form-text text-muted">28x28, 56x56, 112x112</small>
     </div>
-    <div class="form-group">
-        <label for="customsize">Custom Size</label>
-        <input type="number" max="600" min="10" step="10" class="form-control" id="customsize" value="">
-        <small class="form-text text-muted">Size is in pixels</small>
+
+    <div class="form-group range-slider">
+        <label for="customsize">Custom Size
+            <small>(0 = disabled)</small>
+        </label>
+        <input type="range" max="500" min="0" step="1" class="form-control range-slider-range" id="customsize"
+               value="0" style="height: 0;">
+        <small class="text-muted range-slider-value"></small>
+        <small class="text-muted range-slider-value">&nbsp;px</small>
     </div>
+
     <div class="form-group">
         <label for="effect">Effects</label>
         <select class="form-control" id="effect">
@@ -159,7 +165,9 @@
         });
     });
 </script>
-<div class="text-right m-4"><a class="btn btn-link" href="https://github.com/teklynk/twitch_chat_emotes"
-                               target="_blank">Github</a></div>
+<div class="text-right m-4"><a class="btn btn-link" target="_blank"
+                               href="https://github.com/teklynk/twitch_chat_emotes/blob/master/README.md">Help</a><a
+        class="btn btn-link" href="https://github.com/teklynk/twitch_chat_emotes"
+        target="_blank">Github</a></div>
 </body>
 </html>
