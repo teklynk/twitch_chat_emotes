@@ -57,6 +57,8 @@ http://example.com/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&
 
 * You can set the browser source frame-rate from 30 to 60 if the animation seems to stutter.
 
+* You may want to turn on unique-chat mode on Twitch. Type "/uniquechat" into your chat to toggle this mode on/off.
+
 ### Modify the CSS by adding this to the CSS section in your OBS browser source.
 
 ```

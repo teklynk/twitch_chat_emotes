@@ -61,11 +61,13 @@
     <hr>
     <h2>Options</h2>
     <div class="form-group range-slider">
-        <label for="emoteLimit">Limit</label>
+        <label for="emoteLimit">Limit
+            <small>(Number of emotes to allow from each message)</small>
+        </label>
         <input type="range" max="100" min="1" step="1" class="form-control range-slider-range" id="emoteLimit"
                value="50" style="height: 0;">
         <small class="text-muted range-slider-value"></small>
-        <small class="text-muted range-slider-value">&nbsp;Emotes</small>
+        <small class="text-muted range-slider-value">Emotes</small>
     </div>
     <div class="form-group range-slider">
         <label for="speed">Speed</label>
@@ -88,11 +90,17 @@
         </select>
         <small class="form-text text-muted">28x28, 56x56, 112x112</small>
     </div>
-    <div class="form-group">
-        <label for="customsize">Custom Size</label>
-        <input type="number" max="600" min="10" step="10" class="form-control" id="customsize" value="">
-        <small class="form-text text-muted">Size is in pixels</small>
+
+    <div class="form-group range-slider">
+        <label for="customsize">Custom Size
+            <small>(0 = disabled)</small>
+        </label>
+        <input type="range" max="500" min="0" step="1" class="form-control range-slider-range" id="customsize"
+               value="0" style="height: 0;">
+        <small class="text-muted range-slider-value"></small>
+        <small class="text-muted range-slider-value">&nbsp;px</small>
     </div>
+
     <div class="form-group">
         <label for="effect">Effects</label>
         <select class="form-control" id="effect">
@@ -136,6 +144,11 @@
 
         rangeSlider();
 
+        // Check if any input fields have changed
+        $(":text,textarea,:checkbox,input[type=range]").on('change', function (e) {
+            $("#overlaylink").addClass("hide");
+        });
+
         document.getElementById("generate_button").addEventListener("click", function (e) {
             let mainAccount = document.getElementById("mainAccount").value;
             let botAccount = document.getElementById("botAccount").value;
@@ -163,6 +176,7 @@
         });
     });
 </script>
+<<<<<<< HEAD
 <div class="text-right m-4"><a class="btn btn-link" href="https://github.com/teklynk/twitch_chat_emotes"
                                target="_blank">Github</a></div>
 
@@ -177,5 +191,11 @@
         $('<a class="dropdown-item" href="' + val.url + '">' + val.name + '</a>').appendTo('#main-nav');
     });
 </script>
+=======
+<div class="text-right m-4"><a class="btn btn-link" target="_blank"
+                               href="https://github.com/teklynk/twitch_chat_emotes/blob/master/README.md">Help</a><a
+        class="btn btn-link" href="https://github.com/teklynk/twitch_chat_emotes"
+        target="_blank">Github</a></div>
+>>>>>>> 64f007246e151b4bfdcf30b8b0aa9b440060d8b2
 </body>
 </html>
