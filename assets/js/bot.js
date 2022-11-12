@@ -7,6 +7,8 @@ function getUrlParameter(name) {
 
 let fishTank = getUrlParameter('fishtank');
 
+let bttv = getUrlParameter('bttv');
+
 let emoteSize = getUrlParameter('size');
 
 let customSize = getUrlParameter('customsize');
@@ -57,6 +59,13 @@ if (!emoteLimit) {
     emoteLimit = 50;
 }
 
+let bttvEmotes = '';
+
+// Dynamically get browser window width/height and set the #container.
+$(document).ready(function() {
+    $('#container').css({'height':window.innerHeight, 'width':window.innerWidth});
+});
+
 function htmlEntities(html) {
     function it() {
         return html.map(function (n, i, arr) {
@@ -105,6 +114,34 @@ function formatEmotes(text, emotes) {
     return htmlEntities(splitText).join('')
 }
 
+if (bttv === 'true') {
+    // https://gist.github.com/chuckxD/377211b3dd3e8ca8dc505500938555eb
+    // Twitch API Gateway to lookup bttv emotes using the twitch channelName and user_id.
+    $.getJSON("https://twitchapi.teklynk.com/getbttvemotes.php?channel=" + channelName, function (result) {
+        bttvEmotes = result['sharedEmotes'];
+    });
+}
+
+function doBttvEmotes(chatMessage, emoteSize) {
+
+    let bttvEmotesStr = '';
+
+    let chatMessageArr = chatMessage.split(' ');
+
+    chatMessageArr.forEach(function (item) {
+        for (let x in bttvEmotes) {
+            if (item === bttvEmotes[x]['code']) {
+                bttvEmotesStr += 'https://cdn.betterttv.net/emote/' + bttvEmotes[x]['id'] + '/' + emoteSize + 'x,';
+            }
+        }
+    });
+
+    bttvEmotesStr = bttvEmotesStr.slice(0, -1);
+
+    return bttvEmotesStr;
+
+}
+
 function fadeInOut(item) {
     item.fadeIn(2000).delay(duration).fadeOut(2000, function () {
         if (item.next().length) {
@@ -138,20 +175,27 @@ client.on('message', (channel, tags, message, self) => {
     }
 
     function doEmotes() {
-        let randomNum = Math.floor((Math.random() * 1000) + 1);
+        let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
+        let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
         let chatemotes = tags.emotes;
 
         // Ignore echoed messages.
         if (self) return;
 
+        // If Twitch emotes
         let chatEmote = formatEmotes('', chatemotes);
 
         // Create emotes array
         let chatEmoteArr = chatEmote.split(',');
         chatEmoteArr = chatEmoteArr.filter(Boolean);
 
+        let bttvStr = doBttvEmotes(message, emoteSize);
+
         // Set a limit on how many emotes can be displayed from each message
         let limitedEmoteArr = chatEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
+
+        let BetterTTVEmoteArr = bttvStr.split(',');
+        BetterTTVEmoteArr = BetterTTVEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
 
         // Debugging
         //console.log(limitedEmoteArr);
@@ -159,12 +203,12 @@ client.on('message', (channel, tags, message, self) => {
         if (limitedEmoteArr.length !== 0) {
 
             $.each(limitedEmoteArr, function (key, value) {
-                if (value !== "" || value !== null) {
+                if (value > "" || value !== null) {
 
                     // randomize location
                     $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
-                        top: randomNum + 'px',
-                        left: randomNum + 'px'
+                        top: randomNumHeight + 'px',
+                        left: randomNumWidth + 'px'
                     });
 
                     if (effect) {
@@ -180,6 +224,35 @@ client.on('message', (channel, tags, message, self) => {
                 }
             });
 
+        }
+
+        if (bttv === 'true') {
+            // BetterTTV Emotes
+            if (BetterTTVEmoteArr.length !== 0) {
+
+                $.each(BetterTTVEmoteArr, function (key, value) {
+                    if (value > "" || value !== null) {
+
+                        // randomize location
+                        $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
+                            top: randomNumHeight + 'px',
+                            left: randomNumWidth + 'px'
+                        });
+
+                        if (effect) {
+                            $('.latestblock img:first-child').addClass(effect);
+                        }
+
+                        if (fishTank === 'false' || fishTank === '' || !fishTank) {
+                            fadeInOut($('.latestblock img:first-child'));
+                        } else {
+                            $('.latestblock img').fadeIn(animationSpeed);
+                        }
+
+                    }
+                });
+
+            }
         }
 
         //do this after dom latestblock have been created

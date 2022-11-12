@@ -6,6 +6,8 @@ This is a Twitch OBS overlay that displays emotes from Twitch chat. Emotes fly a
 pile up. Tested with 1000 emotes on screen at the same time. Emotes first appear from a random location on the screen
 and randomly move across the screen.
 
+### Now supports BetterTTV emotes!
+
 ## Examples
 
 Standard mode with fade in and fade out
@@ -21,6 +23,8 @@ Fish tank mode (Emote wall)
 [https://twitch-chat-emotes.pages.dev/](https://twitch-chat-emotes.pages.dev/)
 
 ## URL parameters
+
+***bttv***=true/false This will pull BetterTTV emotes that have been set for your channel.
 
 ***emoteLimit***=Max number of emotes to show from each message. (Good for limiting emote spamming or emotes only mode). Default is 50.
 
