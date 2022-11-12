@@ -118,7 +118,7 @@ if (bttv === 'true') {
     // https://gist.github.com/chuckxD/377211b3dd3e8ca8dc505500938555eb
     // Twitch API Gateway to lookup bttv emotes using the twitch channelName and user_id.
     $.getJSON("https://twitchapi.teklynk.com/getbttvemotes.php?channel=" + channelName, function (result) {
-        bttvEmotes = result['sharedEmotes'];
+        bttvEmotes = result;
     });
 }
 
