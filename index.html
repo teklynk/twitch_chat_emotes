@@ -53,17 +53,21 @@
         <input type="text" id="mainAccount" class="form-control">
     </div>
     <div class="form-label-group mb-2">
-        <label for="botAccount">Bot Account <small>(optional)</small></label>
+        <label for="botAccount">Bot Account
+            <small>(optional)</small>
+        </label>
         <input type="text" id="botAccount" class="form-control">
         <small class="form-text text-muted">If set, this will only display emotes from the bot account/user. This can
-            also be set to use your main Twitch account/user. Great for alerts that use a bot account.</small>
+            also be set to use your main Twitch account/user. Great for alerts that use a bot account.
+        </small>
     </div>
     <hr>
     <h2>Options</h2>
     <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" value="" id="bttv">
         <label class="form-check-label" for="bttv">
-            Enable BetterTTV Emotes <small>(experimental)</small>
+            Allow BetterTTV Emotes<br>
+            <small class="text-muted">This will display BetterTTV emotes that have been set for your channel as well as global emotes.</small>
         </label>
     </div>
     <div class="form-group range-slider">
@@ -79,13 +83,15 @@
         <label for="speed">Speed</label>
         <input type="range" max="50" min="1" step="1" class="form-control range-slider-range" id="speed"
                value="5" style="height: 0;">
-        <small class="text-muted range-slider-value"></small><small class="text-muted range-slider-value">&nbsp;Seconds</small>
+        <small class="text-muted range-slider-value"></small>
+        <small class="text-muted range-slider-value">&nbsp;Seconds</small>
     </div>
     <div class="form-group range-slider">
         <label for="duration">Duration</label>
         <input type="range" max="3600" min="1" step="1" class="form-control range-slider-range" id="duration"
                value="15" style="height: 0;">
-        <small class="text-muted range-slider-value"></small><small class="text-muted range-slider-value">&nbsp;Seconds</small>
+        <small class="text-muted range-slider-value"></small>
+        <small class="text-muted range-slider-value">&nbsp;Seconds</small>
     </div>
     <div class="form-group">
         <label for="size">Default Sizes</label>

@@ -24,7 +24,7 @@ Fish tank mode (Emote wall)
 
 ## URL parameters
 
-***bttv***=true/false This will pull BetterTTV emotes that have been set for your channel.
+***bttv***=true/false This will display BetterTTV emotes that have been set for your channel as well as global emotes.
 
 ***emoteLimit***=Max number of emotes to show from each message. (Good for limiting emote spamming or emotes only mode). Default is 50.
 
