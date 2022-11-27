@@ -196,6 +196,7 @@ client.on('message', (channel, tags, message, self) => {
 
         let BetterTTVEmoteArr = bttvStr.split(',');
         BetterTTVEmoteArr = BetterTTVEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
+        BetterTTVEmoteArr = BetterTTVEmoteArr.filter(Boolean);
 
         // Debugging
         //console.log(limitedEmoteArr);
