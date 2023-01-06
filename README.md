@@ -37,7 +37,7 @@ Fish tank mode (Emote wall)
 ***bot*** (optional)=If set, this will only display emotes from the bot account/user. Great for alerts that use a bot
 account.
 
-***size***=1,2,3 Twitch emotes come in 3 different sizes. 28x28, 56x56, 112x112. Default is 3 (112x112). Changing this
+***size***=1,2,3,random - Twitch emotes come in 3 different sizes. 28x28, 56x56, 112x112. Default is 3 (112x112). Changing this
 can help performance.
 
 ***customsize***=pixel value. (ie: 200 = 200px)
