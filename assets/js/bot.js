@@ -27,8 +27,10 @@ if (!emoteSize) {
     emoteSize = 3;
 }
 
-// convert emoteQuality string to integer
-emoteSize = parseInt(emoteSize);
+if (emoteSize !== 'random') {
+    // convert size string to integer
+    emoteSize = parseInt(emoteSize);
+}
 
 let animationSpeed = getUrlParameter('speed');
 
@@ -93,6 +95,18 @@ function htmlEntities(html) {
     return html;
 }
 
+function getRandomNumberBetween(min, max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function emoteScale(emoteSize) {
+    if (emoteSize === 'random') {
+        return getRandomNumberBetween(1, 3);
+    } else {
+        return emoteSize;
+    }
+}
+
 function formatEmotes(text, emotes) {
     let splitText = text.split('');
     for (let i in emotes) {
@@ -107,7 +121,7 @@ function formatEmotes(text, emotes) {
                         return ''
                     });
                 splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[0] + 1, splitText.length));
-                splitText.splice(mote[0], 0, "https://static-cdn.jtvnw.net/emoticons/v2/" + i + "/default/dark/" + emoteSize + ".0,");
+                splitText.splice(mote[0], 0, "https://static-cdn.jtvnw.net/emoticons/v2/" + i + "/default/dark/" + emoteScale(emoteSize) + ".0,");
             }
         }
     }
@@ -122,7 +136,7 @@ if (bttv === 'true') {
     });
 }
 
-function doBttvEmotes(chatMessage, emoteSize) {
+function doBttvEmotes(chatMessage) {
 
     let bttvEmotesStr = '';
 
@@ -131,7 +145,7 @@ function doBttvEmotes(chatMessage, emoteSize) {
     chatMessageArr.forEach(function (item) {
         for (let x in bttvEmotes) {
             if (item === bttvEmotes[x]['code']) {
-                bttvEmotesStr += 'https://cdn.betterttv.net/emote/' + bttvEmotes[x]['id'] + '/' + emoteSize + 'x,';
+                bttvEmotesStr += 'https://cdn.betterttv.net/emote/' + bttvEmotes[x]['id'] + '/' + emoteScale(emoteSize) + 'x,';
             }
         }
     });
@@ -183,13 +197,13 @@ client.on('message', (channel, tags, message, self) => {
         if (self) return;
 
         // If Twitch emotes
-        let chatEmote = formatEmotes('', chatemotes);
+        let chatEmote = formatEmotes('', chatemotes, emoteScale);
 
         // Create emotes array
         let chatEmoteArr = chatEmote.split(',');
         chatEmoteArr = chatEmoteArr.filter(Boolean);
 
-        let bttvStr = doBttvEmotes(message, emoteSize);
+        let bttvStr = doBttvEmotes(message, emoteScale);
 
         // Set a limit on how many emotes can be displayed from each message
         let limitedEmoteArr = chatEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
