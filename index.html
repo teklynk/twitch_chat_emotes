@@ -44,7 +44,7 @@
             <h1 class="h3 pt-4 pl-lg-4 text-center">Twitch Chat Animated Emotes Overlay</h1>
         </div>
         <div class="col-2 text-center">
-            <img src="assets/images/robot.gif" style="width: 60px;" alt="">
+            <img src="assets/images/robot.gif" style="width: 60px;" alt="tekbot_v1" title="Hi, I'm tekbot_v1" id="tekbotImg" onmouseover="onHover();" onmouseout="offHover();">
         </div>
     </div>
     <br>
@@ -190,14 +190,22 @@
         });
     });
 </script>
-
 <div class="text-right m-4"><a class="btn btn-link" target="_blank"
                                href="https://github.com/teklynk/twitch_chat_emotes/blob/master/README.md">Help</a><a
         class="btn btn-link" href="https://github.com/teklynk/twitch_chat_emotes"
-        target="_blank">Github</a></div>
-</body>
-
+        target="_blank">Github</a>
+        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+        <script type='text/javascript'>kofiwidget2.init('Donate', '#191d21', 'O4O0BWF2E');kofiwidget2.draw();</script>
+</div>
 <script>
+    // tekbot_v1 mouse hover action
+    function onHover() {
+        $("#tekbotImg").attr('src', 'assets/images/robot_loop.gif');
+    }
+    function offHover() {
+        $("#tekbotImg").attr('src', 'assets/images/robot.gif');
+    }
+
     // Json data - Ajax call
     let nav_json = JSON.parse($.getJSON({
         'url': "https://twitchapi.teklynk.com/getnav.php",
@@ -208,4 +216,24 @@
         $('<a class="dropdown-item" href="' + val.url + '">' + val.name + '</a>').appendTo('#main-nav');
     });
 </script>
+<style>
+    .btn-container {
+        min-width: auto !important;
+        padding-left: 20px;
+    }
+    span.kofitext {
+        color: #adb5bd !important;
+    }
+    a.kofi-button {
+        border-radius: none;
+        box-shadow: none !important;
+        min-width: auto !important;
+        padding: 0 !important;
+        line-height: unset !important;
+    }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f1d463807d284beb949fac5292fada71"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
 </html>
