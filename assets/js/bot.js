@@ -212,6 +212,13 @@ client.on('message', (channel, tags, message, self) => {
         BetterTTVEmoteArr = BetterTTVEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
         BetterTTVEmoteArr = BetterTTVEmoteArr.filter(Boolean);
 
+        let randomEffect;
+        let effectsArray = ['fade','grow','rotate','skew'];
+
+        if (effect === 'random') {
+            randomEffect = effectsArray[Math.floor(Math.random()*effectsArray.length)];
+        }
+
         // Debugging
         //console.log(limitedEmoteArr);
 
@@ -227,7 +234,12 @@ client.on('message', (channel, tags, message, self) => {
                     });
 
                     if (effect) {
-                        $('.latestblock img:first-child').addClass(effect);
+                        if (effect === 'random') {
+                            console.log(randomEffect);
+                            $('.latestblock img:first-child').addClass(randomEffect);
+                        } else {
+                            $('.latestblock img:first-child').addClass(effect);
+                        }
                     }
 
                     if (fishTank === 'false' || fishTank === '' || !fishTank) {
