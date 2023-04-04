@@ -26,6 +26,10 @@ Fish tank mode (Emote wall)
 
 ***bttv***=true/false This will display BetterTTV emotes that have been set for your channel as well as global emotes.
 
+***7tv***=true/false This will display SevenTV emotes that have been set for your channel as well as global emotes.
+
+***ffz***=true/false This will display FrankerFacez emotes that have been set for your channel as well as global emotes.
+
 ***emoteLimit***=Max number of emotes to show from each message. (Good for limiting emote spamming or emotes only mode). Default is 50.
 
 ***speed***=transition speed, as well as fade-in/fade-out speed (milliseconds value. 5000 = 5 seconds)

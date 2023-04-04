@@ -9,6 +9,10 @@ let fishTank = getUrlParameter('fishtank');
 
 let bttv = getUrlParameter('bttv');
 
+let seventv = getUrlParameter('7tv');
+
+let ffz = getUrlParameter('ffz');
+
 let emoteSize = getUrlParameter('size');
 
 let customSize = getUrlParameter('customsize');
@@ -62,6 +66,10 @@ if (!emoteLimit) {
 }
 
 let bttvEmotes = '';
+
+let seventvEmotes = '';
+
+let ffzEmotes = '';
 
 // Dynamically get browser window width/height and set the #container.
 $(document).ready(function() {
@@ -128,6 +136,7 @@ function formatEmotes(text, emotes) {
     return htmlEntities(splitText).join('')
 }
 
+// BTTV emotes
 if (bttv === 'true') {
     // https://gist.github.com/chuckxD/377211b3dd3e8ca8dc505500938555eb
     // Twitch API Gateway to lookup bttv emotes using the twitch channelName and user_id.
@@ -153,6 +162,62 @@ function doBttvEmotes(chatMessage) {
     bttvEmotesStr = bttvEmotesStr.slice(0, -1);
 
     return bttvEmotesStr;
+
+}
+
+// 7TV Emotes
+if (seventv === 'true') {
+    // Twitch API Gateway to lookup 7tv emotes using the twitch channelName and user_id.
+    $.getJSON("https://twitchapi.teklynk.com/get7tvemotes.php?channel=" + channelName, function (result) {
+        seventvEmotes = result;
+    });
+}
+
+function do7tvEmotes(chatMessage) {
+
+    let seventvEmotesStr = '';
+
+    let chatMessageArr = chatMessage.split(' ');
+
+    chatMessageArr.forEach(function (item) {
+        for (let x in seventvEmotes) {
+            if (item === seventvEmotes[x]['code']) {
+                seventvEmotesStr += 'https://cdn.7tv.app/emote/' + seventvEmotes[x]['id'] + '/' + emoteScale(emoteSize) + 'x.webp,';
+            }
+        }
+    });
+
+    seventvEmotesStr = seventvEmotesStr.slice(0, -1);
+
+    return seventvEmotesStr;
+
+}
+
+// FFZ Emotes
+if (ffz === 'true') {
+    // Twitch API Gateway to lookup ffz emotes using the twitch channelName and user_id.
+    $.getJSON("https://twitchapi.teklynk.com/getffzemotes.php?channel=" + channelName, function (result) {
+        ffzEmotes = result;
+    });
+}
+
+function doffzEmotes(chatMessage) {
+
+    let ffzEmotesStr = '';
+
+    let chatMessageArr = chatMessage.split(' ');
+
+    chatMessageArr.forEach(function (item) {
+        for (let x in ffzEmotes) {
+            if (item === ffzEmotes[x]['code']) {
+                ffzEmotesStr += 'https://cdn.frankerfacez.com/emote/' + seventvEmotes[x]['id'] + '/' + emoteScale(emoteSize);
+            }
+        }
+    });
+
+    ffzEmotesStr = ffzEmotesStr.slice(0, -1);
+
+    return ffzEmotesStr;
 
 }
 
@@ -205,12 +270,24 @@ client.on('message', (channel, tags, message, self) => {
 
         let bttvStr = doBttvEmotes(message, emoteScale);
 
+        let seventvStr = do7tvEmotes(message, emoteScale);
+
+        let ffzStr = doffzEmotes(message, emoteScale);
+
         // Set a limit on how many emotes can be displayed from each message
         let limitedEmoteArr = chatEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
 
         let BetterTTVEmoteArr = bttvStr.split(',');
         BetterTTVEmoteArr = BetterTTVEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
         BetterTTVEmoteArr = BetterTTVEmoteArr.filter(Boolean);
+
+        let SevenTVEmoteArr = seventvStr.split(',');
+        SevenTVEmoteArr = SevenTVEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
+        SevenTVEmoteArr = SevenTVEmoteArr.filter(Boolean);
+
+        let ffzEmoteArr = ffzStr.split(',');
+        ffzEmoteArr = ffzEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
+        ffzEmoteArr = ffzEmoteArr.filter(Boolean);
 
         let randomEffect;
         let effectsArray = ['fade','grow','rotate','skew'];
@@ -258,6 +335,64 @@ client.on('message', (channel, tags, message, self) => {
             if (BetterTTVEmoteArr.length !== 0) {
 
                 $.each(BetterTTVEmoteArr, function (key, value) {
+                    if (value > "" || value !== null) {
+
+                        // randomize location
+                        $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
+                            top: randomNumHeight + 'px',
+                            left: randomNumWidth + 'px'
+                        });
+
+                        if (effect) {
+                            $('.latestblock img:first-child').addClass(effect);
+                        }
+
+                        if (fishTank === 'false' || fishTank === '' || !fishTank) {
+                            fadeInOut($('.latestblock img:first-child'));
+                        } else {
+                            $('.latestblock img').fadeIn(animationSpeed);
+                        }
+
+                    }
+                });
+
+            }
+        }
+
+        if (seventv === 'true') {
+            // SevenTV Emotes
+            if (SevenTVEmoteArr.length !== 0) {
+
+                $.each(SevenTVEmoteArr, function (key, value) {
+                    if (value > "" || value !== null) {
+
+                        // randomize location
+                        $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
+                            top: randomNumHeight + 'px',
+                            left: randomNumWidth + 'px'
+                        });
+
+                        if (effect) {
+                            $('.latestblock img:first-child').addClass(effect);
+                        }
+
+                        if (fishTank === 'false' || fishTank === '' || !fishTank) {
+                            fadeInOut($('.latestblock img:first-child'));
+                        } else {
+                            $('.latestblock img').fadeIn(animationSpeed);
+                        }
+
+                    }
+                });
+
+            }
+        }
+
+        if (ffz === 'true') {
+            // FFZ Emotes
+            if (ffzEmoteArr.length !== 0) {
+
+                $.each(ffzEmoteArr, function (key, value) {
                     if (value > "" || value !== null) {
 
                         // randomize location
