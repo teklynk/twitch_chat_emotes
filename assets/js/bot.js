@@ -210,7 +210,7 @@ function doffzEmotes(chatMessage) {
     chatMessageArr.forEach(function (item) {
         for (let x in ffzEmotes) {
             if (item === ffzEmotes[x]['code']) {
-                ffzEmotesStr += 'https://cdn.frankerfacez.com/emote/' + seventvEmotes[x]['id'] + '/' + emoteScale(emoteSize);
+                ffzEmotesStr += 'https://cdn.frankerfacez.com/emote/' + ffzEmotes[x]['id'] + '/2,';
             }
         }
     });
