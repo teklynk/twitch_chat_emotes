@@ -81,23 +81,20 @@ $(document).ready(async function () {
     let ffzEmotes = '';
 
     // Dynamically get browser window width/height and set the #container.
-    $(document).ready(function () {
-        $('#container').css({ 'height': window.innerHeight, 'width': window.innerWidth });
+    $('#container').css({ 'height': window.innerHeight, 'width': window.innerWidth });
 
-        // Apply custom size via a style block for efficiency
-        if (customSize > 0) {
-            let style = document.createElement('style');
-            style.innerHTML =
-                `.latestblock, .latestblock img {
-                    max-width: ${customSize}px;
-                    max-height: ${customSize}px;
-                    width: ${customSize}px;
-                    height: ${customSize}px;
-                }`;
-            document.head.appendChild(style);
-        }
-    });
-
+    // Apply custom size via a style block for efficiency
+    if (customSize > 0) {
+        let style = document.createElement('style');
+        style.innerHTML =
+            `.latestblock, .latestblock img {
+                max-width: ${customSize}px;
+                max-height: ${customSize}px;
+                width: ${customSize}px;
+                height: ${customSize}px;
+            }`;
+        document.head.appendChild(style);
+    }
     function htmlEntities(html) {
         function it() {
             return html.map(function (n, i, arr) {
