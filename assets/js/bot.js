@@ -119,30 +119,44 @@ function formatEmotes(text, emotes) {
     return htmlEntities(splitText).join('')
 }
 
-// BTTV emotes
-if (bttv === 'true') {
-    // https://gist.github.com/chuckxD/377211b3dd3e8ca8dc505500938555eb
-    // Twitch API Gateway to lookup bttv emotes using the twitch channelName and user_id.
-    $.getJSON(API_SERVER + "/getbttvemotes.php?channel=" + channelName, function (result) {
-        bttvEmotes = result;
-    });
+async function fetchEmoteProvider(endpoint, providerName) {
+    try {
+        const response = await fetch(`${API_SERVER}/${endpoint}?channel=${channelName}`);
+        if (!response.ok) {
+            console.error(`Failed to fetch ${providerName} emotes: ${response.status} ${response.statusText}`);
+            return null;
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`There was a problem fetching ${providerName} emotes:`, error);
+        return null;
+    }
 }
 
-// 7TV Emotes
-if (seventv === 'true') {
-    // Twitch API Gateway to lookup 7tv emotes using the twitch channelName and user_id.
-    $.getJSON(API_SERVER + "/get7tvemotes.php?channel=" + channelName, function (result) {
-        seventvEmotes = result;
-    });
-}
-
-// FFZ Emotes
-if (ffz === 'true') {
-    // Twitch API Gateway to lookup ffz emotes using the twitch channelName and user_id.
-    $.getJSON(API_SERVER + "/getffzemotes.php?channel=" + channelName, function (result) {
-        ffzEmotes = result;
-    });
-}
+// Fetch all enabled third-party emotes in parallel.
+(async () => {
+    const emotePromises = [];
+    if (bttv === 'true') {
+        emotePromises.push(
+            fetchEmoteProvider('getbttvemotes.php', 'BTTV')
+                .then(data => { bttvEmotes = data || bttvEmotes; })
+        );
+    }
+    if (seventv === 'true') {
+        emotePromises.push(
+            fetchEmoteProvider('get7tvemotes.php', '7TV')
+                .then(data => { seventvEmotes = data || seventvEmotes; })
+        );
+    }
+    if (ffz === 'true') {
+        emotePromises.push(
+            fetchEmoteProvider('getffzemotes.php', 'FFZ')
+                .then(data => { ffzEmotes = data || ffzEmotes; })
+        );
+    }
+    // Wait for all fetches to settle.
+    await Promise.all(emotePromises);
+})();
 
 function parseThirdPartyEmotes(chatMessage, emoteList, urlTemplate, size) {
     if (!emoteList) return '';
@@ -168,6 +182,7 @@ function parseThirdPartyEmotes(chatMessage, emoteList, urlTemplate, size) {
     return emoteStr.slice(0, -1);
 }
 
+// Connect to Twitch chat using TMIjs
 const client = new tmi.Client({
     options: {
         debug: true,
