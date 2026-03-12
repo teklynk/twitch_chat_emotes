@@ -8,18 +8,13 @@ let seventv = urlParams.get('7tv') || '';
 
 let ffz = urlParams.get('ffz') || '';
 
-let emoteSize = urlParams.get('size');
+let emoteSize = urlParams.get('size') || 2;
 
 let customSize = parseInt(urlParams.get('customsize')) || 0;
 
 let botUser = urlParams.get('bot') || '';
 
 let effect = urlParams.get('effect') || '';
-
-// default value if size is not set in url
-if (!emoteSize) {
-    emoteSize = 3;
-}
 
 if (emoteSize !== 'random') {
     // convert size string to integer
@@ -49,6 +44,19 @@ const API_SERVER = 'https://twitchapi.teklynk.com';
 // Dynamically get browser window width/height and set the #container.
 $(document).ready(function () {
     $('#container').css({ 'height': window.innerHeight, 'width': window.innerWidth });
+
+    // Apply custom size via a style block for efficiency
+    if (customSize > 0) {
+        let style = document.createElement('style');
+        style.innerHTML =
+            `.latestblock, .latestblock img {
+                max-width: ${customSize}px;
+                max-height: ${customSize}px;
+                width: ${customSize}px;
+                height: ${customSize}px;
+            }`;
+        document.head.appendChild(style);
+    }
 });
 
 function htmlEntities(html) {
@@ -120,52 +128,12 @@ if (bttv === 'true') {
     });
 }
 
-function doBttvEmotes(chatMessage) {
-
-    let bttvEmotesStr = '';
-
-    let chatMessageArr = chatMessage.split(' ');
-
-    chatMessageArr.forEach(function (item) {
-        for (let x in bttvEmotes) {
-            if (item === bttvEmotes[x]['code']) {
-                bttvEmotesStr += 'https://cdn.betterttv.net/emote/' + bttvEmotes[x]['id'] + '/' + emoteScale(emoteSize) + 'x,';
-            }
-        }
-    });
-
-    bttvEmotesStr = bttvEmotesStr.slice(0, -1);
-
-    return bttvEmotesStr;
-
-}
-
 // 7TV Emotes
 if (seventv === 'true') {
     // Twitch API Gateway to lookup 7tv emotes using the twitch channelName and user_id.
     $.getJSON(API_SERVER + "/get7tvemotes.php?channel=" + channelName, function (result) {
         seventvEmotes = result;
     });
-}
-
-function do7tvEmotes(chatMessage) {
-
-    let seventvEmotesStr = '';
-
-    let chatMessageArr = chatMessage.split(' ');
-
-    chatMessageArr.forEach(function (item) {
-        for (let x in seventvEmotes) {
-            if (item === seventvEmotes[x]['code']) {
-                seventvEmotesStr += 'https://cdn.7tv.app/emote/' + seventvEmotes[x]['id'] + '/' + emoteScale(emoteSize) + 'x.webp,';
-            }
-        }
-    });
-
-    seventvEmotesStr = seventvEmotesStr.slice(0, -1);
-
-    return seventvEmotesStr;
-
 }
 
 // FFZ Emotes
@@ -176,24 +144,28 @@ if (ffz === 'true') {
     });
 }
 
-function doffzEmotes(chatMessage) {
+function parseThirdPartyEmotes(chatMessage, emoteList, urlTemplate, size) {
+    if (!emoteList) return '';
 
-    let ffzEmotesStr = '';
+    let emoteStr = '';
+    const chatMessageArr = chatMessage.split(' ');
+    // Check if the template requires a size replacement.
+    const requiresEmoteScale = urlTemplate.includes('{size}');
 
-    let chatMessageArr = chatMessage.split(' ');
-
-    chatMessageArr.forEach(function (item) {
-        for (let x in ffzEmotes) {
-            if (item === ffzEmotes[x]['code']) {
-                ffzEmotesStr += 'https://cdn.frankerfacez.com/emote/' + ffzEmotes[x]['id'] + '/2,';
+    chatMessageArr.forEach(function (word) {
+        for (const i in emoteList) {
+            const emote = emoteList[i];
+            if (word === emote.code) {
+                let url = urlTemplate.replace('{id}', emote.id);
+                if (requiresEmoteScale) {
+                    url = url.replace('{size}', emoteScale(size));
+                }
+                emoteStr += url + ',';
             }
         }
     });
 
-    ffzEmotesStr = ffzEmotesStr.slice(0, -1);
-
-    return ffzEmotesStr;
-
+    return emoteStr.slice(0, -1);
 }
 
 const client = new tmi.Client({
@@ -201,261 +173,161 @@ const client = new tmi.Client({
         debug: true,
         skipUpdatingEmotesets: true
     },
-    connection: { reconnect: true },
+    connection: {
+        reconnect: true,
+        maxReconnectAttempts: 3
+    },
     channels: [channelName]
 });
 
-client.connect().catch(console.error);
+client.connect().catch((err) => {
+    console.error(err);
+});
+
+client.on("maxreconnect", () => {
+    $("<div class='msg-error'>Failed to connect to Twitch Chat. Please refresh to try again. Twitch Access Token may have also expired.</div>").prependTo('body');
+});
+
+function randomFromTo(from, to) {
+    return Math.floor(Math.random() * (to - from + 1) + from);
+}
+
+function moveRandom(obj) {
+    /* get container position and size
+     * -- access method : cPos.top and cPos.left */
+    // If the emote has no size yet, wait a bit and try again.
+    // This can happen if moveRandom is called before the image has loaded and rendered.
+    let bHeight = obj.height();
+    let bWidth = obj.width();
+    if (bHeight === 0 || bWidth === 0) {
+        setTimeout(function() { moveRandom(obj); }, 100);
+        return;
+    }
+
+    let cPos = $('#container').offset();
+    let cHeight = $('#container').height();
+    let cWidth = $('#container').width();
+
+    // get box padding (assume all padding have same value)
+    let pad = parseInt($('#container').css('padding-top').replace('px', ''));
+
+    // get movable box size
+    // set maximum position
+    let maxY = cPos.top + cHeight - bHeight - pad;
+    let maxX = cPos.left + cWidth - bWidth - pad;
+
+    // set minimum position
+    let minY = cPos.top + pad;
+    let minX = cPos.left + pad;
+
+    // set new position
+    let newY = randomFromTo(minY, maxY);
+    let newX = randomFromTo(minX, maxX);
+
+    let newAnimationSpeed = randomFromTo(animationSpeed * 0.75, animationSpeed * 1.5);
+
+    obj.animate({
+        top: newY,
+        left: newX
+    }, newAnimationSpeed, function () {
+        if (!obj.data('fading')) {
+            moveRandom(obj);
+        }
+    });
+}
+
+function createEmote(emoteUrl) {
+    if (!emoteUrl || emoteUrl.trim() === '') {
+        return;
+    }
+
+    let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
+    let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
+
+    // randomize location
+    let $emoteDiv = $("<div class='latestblock'><img src='" + emoteUrl + "' /></div>").appendTo("#container").css({
+        top: randomNumHeight + 'px',
+        left: randomNumWidth + 'px'
+    });
+    let $emoteImg = $emoteDiv.find('img');
+
+    if (effect) {
+        let currentEffect = effect;
+        const effectsArray = ['fade', 'grow', 'rotate', 'skew'];
+        if (effect === 'random') {
+            currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
+        }
+        $emoteImg.addClass(currentEffect);
+    }
+
+    if (fishTank === 'false' || fishTank === '' || !fishTank) {
+        $emoteImg.fadeIn(2000);
+        moveRandom($emoteDiv);
+        setTimeout(function () {
+            $emoteDiv.data('fading', true);
+            // Animate opacity to fade out, without queueing, so it runs in parallel with movement.
+            $emoteDiv.animate({
+                opacity: 0
+            }, {
+                duration: 2000,
+                queue: false,
+                complete: function () {
+                    $(this).remove();
+                }
+            });
+        }, 2000 + duration);
+    } else {
+        $emoteImg.fadeIn(animationSpeed);
+        moveRandom($emoteDiv);
+    }
+}
+
+function doEmotes(channel, tags, message, self) {
+    // Ignore echoed messages.
+    if (self) return;
+
+    // If Twitch emotes
+    let chatEmote = formatEmotes('', tags.emotes, emoteSize);
+    let chatEmoteArr = chatEmote.split(',');
+
+    // 3rd Party Emotes
+    let bttvEmoteArr = [];
+    if (bttv === 'true') {
+        const bttvStr = parseThirdPartyEmotes(message, bttvEmotes, 'https://cdn.betterttv.net/emote/{id}/{size}x', emoteSize);
+        bttvEmoteArr = bttvStr.split(',');
+    }
+
+    let seventvEmoteArr = [];
+    if (seventv === 'true') {
+        const seventvStr = parseThirdPartyEmotes(message, seventvEmotes, 'https://cdn.7tv.app/emote/{id}/{size}x.webp', emoteSize);
+        seventvEmoteArr = seventvStr.split(',');
+    }
+
+    let ffzEmoteArr = [];
+    if (ffz === 'true') {
+        // FFZ emotes use a hardcoded size in the URL (e.g., /2, /4)
+        const ffzStr = parseThirdPartyEmotes(message, ffzEmotes, 'https://cdn.frankerfacez.com/emote/{id}/2', emoteSize);
+        ffzEmoteArr = ffzStr.split(',');
+    }
+
+    // Combine all emotes from the message, filter out empty strings, and then apply the limit.
+    const allEmotes = []
+        .concat(chatEmoteArr, bttvEmoteArr, seventvEmoteArr, ffzEmoteArr)
+        .filter(Boolean)
+        .slice(0, parseInt(emoteLimit));
+
+    // Create emote elements on the screen
+    $.each(allEmotes, function (key, emoteUrl) {
+        createEmote(emoteUrl);
+    });
+}
 
 client.on('message', (channel, tags, message, self) => {
-
     let username = `${tags.username}`;
 
     if (botUser === username) {
-        doEmotes(); // bot user only
+        doEmotes(channel, tags, message, self); // bot user only
     } else if (botUser === '') {
-        doEmotes(); // all users
+        doEmotes(channel, tags, message, self); // all users
     }
-
-    function doEmotes() {
-        function randomFromTo(from, to) {
-            return Math.floor(Math.random() * (to - from + 1) + from);
-        }
-
-        function moveRandom(obj) {
-            /* get container position and size
-             * -- access method : cPos.top and cPos.left */
-            let cPos = $('#container').offset();
-            let cHeight = $('#container').height();
-            let cWidth = $('#container').width();
-
-            // get box padding (assume all padding have same value)
-            let pad = parseInt($('#container').css('padding-top').replace('px', ''));
-
-            // get movable box size
-            let bHeight = obj.height();
-            let bWidth = obj.width();
-
-            // set maximum position
-            let maxY = cPos.top + cHeight - bHeight - pad;
-            let maxX = cPos.left + cWidth - bWidth - pad;
-
-            // set minimum position
-            let minY = cPos.top + pad;
-            let minX = cPos.left + pad;
-
-            // set new position
-            let newY = randomFromTo(minY, maxY);
-            let newX = randomFromTo(minX, maxX);
-
-            let newAnimationSpeed = randomFromTo(animationSpeed * 0.75, animationSpeed * 1.5);
-
-            obj.animate({
-                top: newY,
-                left: newX
-            }, newAnimationSpeed, function () {
-                moveRandom(obj);
-            });
-        }
-
-        let chatemotes = tags.emotes;
-
-        // Ignore echoed messages.
-        if (self) return;
-
-        // If Twitch emotes
-        let chatEmote = formatEmotes('', chatemotes, emoteScale);
-
-        // Create emotes array
-        let chatEmoteArr = chatEmote.split(',');
-        chatEmoteArr = chatEmoteArr.filter(Boolean);
-
-        let bttvStr = doBttvEmotes(message, emoteScale);
-
-        let seventvStr = do7tvEmotes(message, emoteScale);
-
-        let ffzStr = doffzEmotes(message, emoteScale);
-
-        // Set a limit on how many emotes can be displayed from each message
-        let limitedEmoteArr = chatEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
-
-        let BetterTTVEmoteArr = bttvStr.split(',');
-        BetterTTVEmoteArr = BetterTTVEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
-        BetterTTVEmoteArr = BetterTTVEmoteArr.filter(Boolean);
-
-        let SevenTVEmoteArr = seventvStr.split(',');
-        SevenTVEmoteArr = SevenTVEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
-        SevenTVEmoteArr = SevenTVEmoteArr.filter(Boolean);
-
-        let ffzEmoteArr = ffzStr.split(',');
-        ffzEmoteArr = ffzEmoteArr.filter((val, i) => i < parseInt(emoteLimit));
-        ffzEmoteArr = ffzEmoteArr.filter(Boolean);
-
-        let effectsArray = ['fade', 'grow', 'rotate', 'skew'];
-
-        if (limitedEmoteArr.length !== 0) {
-
-            $.each(limitedEmoteArr, function (key, value) {
-                if (value > "" || value !== null) {
-                    let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
-                    let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
-
-                    // randomize location
-                    let $emoteDiv = $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
-                        top: randomNumHeight + 'px',
-                        left: randomNumWidth + 'px'
-                    });
-                    let $emoteImg = $emoteDiv.find('img');
-
-                    if (effect) {
-                        let currentEffect = effect;
-                        if (effect === 'random') {
-                            currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
-                        }
-                        $emoteImg.addClass(currentEffect);
-                    }
-
-                    if (fishTank === 'false' || fishTank === '' || !fishTank) {
-                        $emoteImg.fadeIn(2000).delay(duration).fadeOut(2000, function () {
-                            $emoteDiv.remove();
-                        });
-                    } else {
-                        $emoteImg.fadeIn(animationSpeed);
-                    }
-
-                    moveRandom($emoteDiv);
-                }
-            });
-
-        }
-
-        if (bttv === 'true') {
-            // BetterTTV Emotes
-            if (BetterTTVEmoteArr.length !== 0) {
-
-                $.each(BetterTTVEmoteArr, function (key, value) {
-                    if (value > "" || value !== null) {
-                        let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
-                        let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
-
-                        // randomize location
-                        let $emoteDiv = $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
-                            top: randomNumHeight + 'px',
-                            left: randomNumWidth + 'px'
-                        });
-                        let $emoteImg = $emoteDiv.find('img');
-
-                        if (effect) {
-                            let currentEffect = effect;
-                            if (effect === 'random') {
-                                currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
-                            }
-                            $emoteImg.addClass(currentEffect);
-                        }
-
-                        if (fishTank === 'false' || fishTank === '' || !fishTank) {
-                            $emoteImg.fadeIn(2000).delay(duration).fadeOut(2000, function () {
-                                $emoteDiv.remove();
-                            });
-                        } else {
-                            $emoteImg.fadeIn(animationSpeed);
-                        }
-
-                        moveRandom($emoteDiv);
-                    }
-                });
-
-            }
-        }
-
-        if (seventv === 'true') {
-            // SevenTV Emotes
-            if (SevenTVEmoteArr.length !== 0) {
-
-                $.each(SevenTVEmoteArr, function (key, value) {
-                    if (value > "" || value !== null) {
-                        let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
-                        let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
-
-                        // randomize location
-                        let $emoteDiv = $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
-                            top: randomNumHeight + 'px',
-                            left: randomNumWidth + 'px'
-                        });
-                        let $emoteImg = $emoteDiv.find('img');
-
-                        if (effect) {
-                            let currentEffect = effect;
-                            if (effect === 'random') {
-                                currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
-                            }
-                            $emoteImg.addClass(currentEffect);
-                        }
-
-                        if (fishTank === 'false' || fishTank === '' || !fishTank) {
-                            $emoteImg.fadeIn(2000).delay(duration).fadeOut(2000, function () {
-                                $emoteDiv.remove();
-                            });
-                        } else {
-                            $emoteImg.fadeIn(animationSpeed);
-                        }
-
-                        moveRandom($emoteDiv);
-                    }
-                });
-
-            }
-        }
-
-        if (ffz === 'true') {
-            // FFZ Emotes
-            if (ffzEmoteArr.length !== 0) {
-
-                $.each(ffzEmoteArr, function (key, value) {
-                    if (value > "" || value !== null) {
-                        let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
-                        let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
-
-                        // randomize location
-                        let $emoteDiv = $("<div class='latestblock'><img src='" + value + "' /></div>").appendTo("#container").css({
-                            top: randomNumHeight + 'px',
-                            left: randomNumWidth + 'px'
-                        });
-                        let $emoteImg = $emoteDiv.find('img');
-
-                        if (effect) {
-                            let currentEffect = effect;
-                            if (effect === 'random') {
-                                currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
-                            }
-                            $emoteImg.addClass(currentEffect);
-                        }
-
-                        if (fishTank === 'false' || fishTank === '' || !fishTank) {
-                            $emoteImg.fadeIn(2000).delay(duration).fadeOut(2000, function () {
-                                $emoteDiv.remove();
-                            });
-                        } else {
-                            $emoteImg.fadeIn(animationSpeed);
-                        }
-
-                        moveRandom($emoteDiv);
-                    }
-                });
-
-            }
-        }
-
-        //do this after dom latestblock have been created
-        if (customSize > 0) {
-            $(".latestblock, .latestblock img").css({
-                'max-width': customSize + 'px',
-                'max-height': customSize + 'px',
-                'width': customSize + 'px',
-                'height': customSize + 'px'
-            });
-        }
-
-    }
-
 });
