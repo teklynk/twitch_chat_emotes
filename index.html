@@ -151,6 +151,7 @@
     <div id="overlaylink" class="hide"></div>
 </div>
 <script>
+    const API_SERVER = 'https://twitchapi.teklynk.com';
     $(document).ready(function () {
         let rangeSlider = function rangeSlider() {
             let slider = $('.range-slider'),
@@ -225,7 +226,7 @@
 
     // Json data - Ajax call
     let nav_json = JSON.parse($.getJSON({
-        'url': "https://twitchapi.teklynk.com/getnav.php",
+        'url': API_SERVER + "/getnav.php",
         'async': false
     }).responseText);
 
