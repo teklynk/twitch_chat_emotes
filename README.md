@@ -4,6 +4,12 @@
 
 This is a **Twitch OBS overlay** that brings your chat to life by displaying emotes floating across the screen. It acts as an emote wall or an animated stream of emotes. It is optimized for performance (tested with 1000+ emotes) and runs entirely client-side.
 
+## Demo
+
+This demo is using Random emote size and Random effect. Great for DJ streams.
+
+[![Watch the demo](demo_example1_thumbnail.jpg)](https://raw.githubusercontent.com/teklynk/twitch_chat_emotes/master/demo_example1.mp4)
+
 **Features:**
 *   **Native & Third-Party Support:** Works with Twitch, BetterTTV, SevenTV, and FrankerFacez emotes.
 *   **Performance:** Lightweight and optimized for OBS.
