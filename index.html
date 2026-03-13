@@ -261,14 +261,6 @@
         });
     });
 
-    // tekbot_v1 mouse hover action
-    function onHover() {
-        $("#tekbotImg").attr('src', 'assets/images/robot_loop.gif');
-    }
-    function offHover() {
-        $("#tekbotImg").attr('src', 'assets/images/robot.gif');
-    }
-
     // Json data - Ajax call
     let nav_json = JSON.parse($.getJSON({
         'url': API_SERVER + "/getnav.php",
