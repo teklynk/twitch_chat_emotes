@@ -183,6 +183,8 @@
             <option value="grow">Grow</option>
             <option value="rotate">Rotate</option>
             <option value="skew">Skew</option>
+            <option value="bottom_top">Bottom to Top</option>
+            <option value="top_bottom">Top to Bottom</option>
             <option value="random">Random</option>
         </select>
     </div>
@@ -230,7 +232,7 @@
         rangeSlider();
 
         // Check if any input fields have changed
-        $(":text,textarea,:checkbox,input[type=range]").on('change', function (e) {
+        $(":text,textarea,:checkbox,input[type=range],select").on('change', function (e) {
             $("#overlaylink").addClass("hide");
         });
 

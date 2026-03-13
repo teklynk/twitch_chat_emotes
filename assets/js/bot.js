@@ -243,6 +243,40 @@ $(document).ready(async function () {
         return Math.floor(Math.random() * (to - from + 1) + from);
     }
 
+    function moveVertically(obj, direction) {
+        const containerHeight = window.innerHeight;
+        const emoteHeight = obj.height();
+
+        // If the emote has no size yet, wait a bit and try again.
+        if (emoteHeight === 0) {
+            setTimeout(function() { moveVertically(obj, direction); }, 100);
+            return;
+        }
+
+        let startY, endY;
+
+        if (direction === 'up') {
+            startY = containerHeight; // Start just off-screen at the bottom
+            endY = -emoteHeight;     // End just off-screen at the top
+        } else { // 'down'
+            startY = -emoteHeight;   // Start just off-screen at the top
+            endY = containerHeight;  // End just off-screen at the bottom
+        }
+
+        const containerWidth = window.innerWidth;
+        const emoteWidth = obj.width();
+        const randomX = Math.floor(Math.random() * (containerWidth - emoteWidth));
+
+        obj.css({
+            top: startY + 'px',
+            left: randomX + 'px'
+        });
+
+        obj.find('img').fadeIn(250);
+
+        obj.animate({ top: endY }, { duration: animationSpeed, easing: 'linear', complete: function() { $(this).remove(); } });
+    }
+
     function moveRandom(obj) {
         /* get container position and size
         * -- access method : cPos.top and cPos.left */
@@ -292,44 +326,58 @@ $(document).ready(async function () {
             return;
         }
 
-        let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
-        let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
-
-        // randomize location
-        let $emoteDiv = $("<div class='latestblock'><img src='" + emoteUrl + "' /></div>").appendTo("#container").css({
-            top: randomNumHeight + 'px',
-            left: randomNumWidth + 'px'
-        });
-        let $emoteImg = $emoteDiv.find('img');
-
-        if (effect) {
-            let currentEffect = effect;
-            const effectsArray = ['fade', 'grow', 'rotate', 'skew'];
-            if (effect === 'random') {
-                currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
-            }
-            $emoteImg.addClass(currentEffect);
+        let currentEffect = effect;
+        if (effect === 'random') {
+            const effectsArray = ['fade', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom'];
+            currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
         }
 
-        if (fishTank === 'false' || fishTank === '' || !fishTank) {
-            $emoteImg.fadeIn(2000);
-            moveRandom($emoteDiv);
-            setTimeout(function () {
-                $emoteDiv.data('fading', true);
-                // Animate opacity to fade out, without queueing, so it runs in parallel with movement.
-                $emoteDiv.animate({
-                    opacity: 0
-                }, {
-                    duration: 2000,
-                    queue: false,
-                    complete: function () {
-                        $(this).remove();
-                    }
-                });
-            }, 2000 + duration);
+        let $emoteDiv = $("<div class='latestblock'><img src='" + emoteUrl + "' /></div>").appendTo("#container");
+
+        if (currentEffect === 'bottom_top' || currentEffect === 'top_bottom') {
+            const direction = currentEffect === 'bottom_top' ? 'up' : 'down';
+            const randomDelay = Math.floor(Math.random() * 3000);
+
+            // We need to wait for the image to load to get its dimensions.
+            $emoteDiv.find('img').on('load', function() {
+                setTimeout(function() {
+                    moveVertically($emoteDiv, direction);
+                }, randomDelay);
+            }).on('error', function() {
+                $emoteDiv.remove();
+            });
+
+            // Handle cached images that might not fire 'load' event
+            if ($emoteDiv.find('img')[0].complete) {
+                $emoteDiv.find('img').trigger('load');
+            }
         } else {
-            $emoteImg.fadeIn(animationSpeed);
-            moveRandom($emoteDiv);
+            // Logic for all other effects
+            let randomNumHeight = Math.floor(Math.random() * (window.innerHeight - 1 + 1)) + 1;
+            let randomNumWidth = Math.floor(Math.random() * (window.innerWidth - 1 + 1)) + 1;
+
+            $emoteDiv.css({
+            top: randomNumHeight + 'px',
+            left: randomNumWidth + 'px'
+            });
+            let $emoteImg = $emoteDiv.find('img');
+
+            if (currentEffect && currentEffect !== 'fade' && currentEffect !== '') {
+                $emoteImg.addClass(currentEffect);
+            }
+
+            if (fishTank === 'false' || fishTank === '' || !fishTank) {
+                $emoteImg.fadeIn(2000);
+                moveRandom($emoteDiv);
+                setTimeout(function() {
+                    $emoteDiv.data('fading', true);
+                    // Animate opacity to fade out, without queueing, so it runs in parallel with movement.
+                    $emoteDiv.animate({ opacity: 0 }, { duration: 2000, queue: false, complete: function() { $(this).remove(); } });
+                }, 2000 + duration);
+            } else {
+                $emoteImg.fadeIn(animationSpeed);
+                moveRandom($emoteDiv);
+            }
         }
     }
 
