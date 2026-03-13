@@ -8,7 +8,7 @@ This is a **Twitch OBS overlay** that brings your chat to life by displaying emo
 
 This demo is using Random emote size and Random effect. Great for DJ streams.
 
-[![Watch the demo](demo_example1_thumbnail.jpg)](https://raw.githubusercontent.com/teklynk/twitch_chat_emotes/master/demo_example1.mp4)
+[![Watch the demo](demo_example1_thumbnail.jpg)](https://github.com/teklynk/twitch_chat_emotes/blob/master/demo_example1.mp4)
 
 **Features:**
 *   **Native & Third-Party Support:** Works with Twitch, BetterTTV, SevenTV, and FrankerFacez emotes.
