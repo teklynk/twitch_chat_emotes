@@ -277,6 +277,40 @@ $(document).ready(async function () {
         obj.animate({ top: endY }, { duration: animationSpeed, easing: 'linear', complete: function() { $(this).remove(); } });
     }
 
+    function moveHorizontally(obj, direction) {
+        const containerWidth = window.innerWidth;
+        const emoteWidth = obj.width();
+
+        // If the emote has no size yet, wait a bit and try again.
+        if (emoteWidth === 0) {
+            setTimeout(function() { moveHorizontally(obj, direction); }, 100);
+            return;
+        }
+
+        let startX, endX;
+
+        if (direction === 'right') { // left to right
+            startX = -emoteWidth;
+            endX = containerWidth;
+        } else { // 'left', for right to left
+            startX = containerWidth;
+            endX = -emoteWidth;
+        }
+
+        const containerHeight = window.innerHeight;
+        const emoteHeight = obj.height();
+        const randomY = Math.floor(Math.random() * (containerHeight - emoteHeight));
+
+        obj.css({
+            top: randomY + 'px',
+            left: startX + 'px'
+        });
+
+        obj.find('img').fadeIn(250);
+
+        obj.animate({ left: endX }, { duration: animationSpeed, easing: 'linear', complete: function() { $(this).remove(); } });
+    }
+
     function moveRandom(obj) {
         /* get container position and size
         * -- access method : cPos.top and cPos.left */
@@ -328,7 +362,7 @@ $(document).ready(async function () {
 
         let currentEffect = effect;
         if (effect === 'random') {
-            const effectsArray = ['fade', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom'];
+            const effectsArray = ['fade', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom', 'left_right', 'right_left'];
             currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
         }
 
@@ -342,6 +376,23 @@ $(document).ready(async function () {
             $emoteDiv.find('img').on('load', function() {
                 setTimeout(function() {
                     moveVertically($emoteDiv, direction);
+                }, randomDelay);
+            }).on('error', function() {
+                $emoteDiv.remove();
+            });
+
+            // Handle cached images that might not fire 'load' event
+            if ($emoteDiv.find('img')[0].complete) {
+                $emoteDiv.find('img').trigger('load');
+            }
+        } else if (currentEffect === 'left_right' || currentEffect === 'right_left') {
+            const direction = currentEffect === 'left_right' ? 'right' : 'left';
+            const randomDelay = Math.floor(Math.random() * 3000);
+
+            // We need to wait for the image to load to get its dimensions.
+            $emoteDiv.find('img').on('load', function() {
+                setTimeout(function() {
+                    moveHorizontally($emoteDiv, direction);
                 }, randomDelay);
             }).on('error', function() {
                 $emoteDiv.remove();
