@@ -181,7 +181,22 @@ $(document).ready(async function () {
         if (seventv === 'true') {
             emotePromises.push(
                 fetchEmoteProvider('get7tvemotes.php', '7TV')
-                    .then(data => { seventvEmotes = data || seventvEmotes; })
+                    .then(data => {
+                        if (data) {
+                            let combined = [];
+                            if (data.emote_set && Array.isArray(data.emote_set.emotes)) {
+                                combined = combined.concat(data.emote_set.emotes);
+                            }
+                            if (Array.isArray(data.emotes)) {
+                                combined = combined.concat(data.emotes);
+                            }
+                            // Map 'name' to 'code' for compatibility with parseThirdPartyEmotes
+                            seventvEmotes = combined.map(e => ({
+                                id: e.id,
+                                code: e.name
+                            }));
+                        }
+                    })
             );
         }
         if (ffz === 'true') {
