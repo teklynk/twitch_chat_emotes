@@ -287,6 +287,7 @@ $(document).ready(async function () {
             left: randomX + 'px'
         });
 
+        obj.css('opacity', 1);
         obj.find('img').fadeIn(250);
 
         obj.animate({ top: endY }, { duration: animationSpeed, easing: 'linear', complete: function() { $(this).remove(); } });
@@ -321,6 +322,7 @@ $(document).ready(async function () {
             left: startX + 'px'
         });
 
+        obj.css('opacity', 1);
         obj.find('img').fadeIn(250);
 
         obj.animate({ left: endX }, { duration: animationSpeed, easing: 'linear', complete: function() { $(this).remove(); } });
@@ -377,7 +379,7 @@ $(document).ready(async function () {
 
         let currentEffect = effect;
         if (effect === 'random') {
-            const effectsArray = ['fade', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom', 'left_right', 'right_left'];
+            const effectsArray = ['fade', 'pop_in', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom', 'left_right', 'right_left'];
             currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
         }
 
@@ -428,20 +430,27 @@ $(document).ready(async function () {
             });
             let $emoteImg = $emoteDiv.find('img');
 
-            if (currentEffect && currentEffect !== 'fade' && currentEffect !== '') {
+            if (currentEffect && currentEffect !== 'fade' && currentEffect !== '' && currentEffect !== 'pop_in') {
                 $emoteImg.addClass(currentEffect);
             }
 
-            if (fishTank === 'false' || fishTank === '' || !fishTank) {
+            let entranceDuration = 2000;
+            if (currentEffect === 'pop_in') {
+                $emoteDiv.addClass('pop-in');
+                entranceDuration = 300;
+            } else {
+                $emoteDiv.css('opacity', 1);
                 $emoteImg.fadeIn(2000);
+            }
+
+            if (fishTank === 'false' || fishTank === '' || !fishTank) {
                 moveRandom($emoteDiv);
                 setTimeout(function() {
                     $emoteDiv.data('fading', true);
                     // Animate opacity to fade out, without queueing, so it runs in parallel with movement.
                     $emoteDiv.animate({ opacity: 0 }, { duration: 2000, queue: false, complete: function() { $(this).remove(); } });
-                }, 2000 + duration);
+                }, entranceDuration + duration);
             } else {
-                $emoteImg.fadeIn(animationSpeed);
                 moveRandom($emoteDiv);
             }
         }
