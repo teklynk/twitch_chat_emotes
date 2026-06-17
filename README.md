@@ -86,6 +86,6 @@ Grayscale emotes
 Pride (rainbow) behind emotes
 ```css
 .latestblock img {
-    border-image: linear-gradient(red, orange, yellow, green, blue, violet) 25% 25% 25% 25% / 20px 20px !important;
+    border-image: linear-gradient(red, orange, yellow, green, blue, violet) 25% 25% 25% 25% / 40px 40px !important;
 }
 ```
