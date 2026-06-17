@@ -127,6 +127,38 @@
         <div class="card-body shadow">
             <h2>Twitch Chat Animated Emotes Wall Overlay</h2>
             <p>This is a Twitch OBS overlay that displays emotes from Twitch chat. Emotes fly across the screen or stay on screen and pile up. Tested with 1000 emotes on screen at the same time. Emotes first appear from a random location on the screen and randomly move across the screen.</p>
+            <p>
+                <strong>Custom CSS options:</strong>
+                <br>
+                This is custom CSS that you can add to the OBS browser source CSS properties.
+            </p>
+            Add a drop shadow to emotes<br>
+            <code>
+            .latestblock img {
+            filter: drop-shadow(5px 5px 15px #00000090);
+            }
+            </code>
+            <br>
+            Flip emotes<br>
+            <code>
+            .latestblock img {
+            transform: scaleX(-1) !important;
+            }
+            </code>
+            <br>
+            Grayscale emotes<br>
+            <code>
+            .latestblock img {
+            filter: grayscale(100%) !important;
+            }
+            </code>
+            <br>
+            Pride <small>(rainbow)</small> behind emotes<br>
+            <code>
+            .latestblock img {
+            border-image: linear-gradient(red, orange, yellow, green, blue, violet) 25% 25% 25% 25% / 20px 20px !important;
+            }
+            </code>
             <div class="text-center p-2 col-12">
                 <a class="btn btn-link btn-lg" href="https://github.com/teklynk/twitch_chat_emotes/blob/master/README.md" target="_blank" title="README"><i class="fa-brands fa-readme"></i></a>
                 <a class="btn btn-link btn-lg" href="https://github.com/teklynk/twitch_chat_emotes" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>

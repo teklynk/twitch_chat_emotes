@@ -61,3 +61,31 @@ Just clone or download the repo and open **"bot.html"** in your browser.
 **No web server needed!** Everything runs client-side using plain old javascript, html and css.
 
 You can set the browser source to "Local File" in OBS and point it to the `bot.html` file in your downloaded folder.
+
+## Custom CSS options:
+**This is custom CSS that you can add to the OBS browser source CSS properties.**
+
+Add a drop shadow to emotes
+```css
+.latestblock img {
+  	filter: drop-shadow(5px 5px 15px #00000090);
+}
+```
+Flip emotes
+```css
+.latestblock img {
+  	transform: scaleX(-1) !important;
+}
+```
+Grayscale emotes
+```css
+.latestblock img {
+    filter: grayscale(100%) !important;
+}
+```
+Pride (rainbow) behind emotes
+```css
+.latestblock img {
+    border-image: linear-gradient(red, orange, yellow, green, blue, violet) 25% 25% 25% 25% / 20px 20px !important;
+}
+```
