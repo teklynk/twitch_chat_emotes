@@ -33,7 +33,7 @@ Configure the overlay by adding these parameters to the URL.
 | `duration` | Integer | `5000` | How long emotes stay on screen in milliseconds. |
 | `size` | String/Int | `2` | Twitch emote size: `1` (28px), `2` (56px), `3` (112px), or `random`. |
 | `customsize` | Integer | `0` | Force a specific pixel size (e.g., `50` for 50px). Overrides `size`. |
-| `effect` | String | `fade` | Animation: `grow`, `rotate`, `skew`, `bottom_top`, `top_bottom`, `random`. |
+| `effect` | String | `fade` | Animation: `grow`, `rotate`, `skew`, `bottom_top`, `top_bottom`, `random`, `pop_in`. |
 | `fishtank` | Boolean | `false` | If `true`, emotes persist on screen indefinitely until refreshed. |
 | `emoteLimit` | Integer | `50` | Max number of emotes to show per chat message. |
 | `bttv` | Boolean | `false` | Enable BetterTTV emotes. |
@@ -41,7 +41,7 @@ Configure the overlay by adding these parameters to the URL.
 | `ffz` | Boolean | `false` | Enable FrankerFacez emotes. |
 
 **Example URL:**
-`http://example.com/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&effect=grow&bttv=true&7tv=true`
+`http://example.com/bot.html?channel=MrStreamer&speed=5000&duration=15000&size=3&effect=grow,skew,pop-in&bttv=true&7tv=true&ffz=true`
 
 ## How to use in OBS
 

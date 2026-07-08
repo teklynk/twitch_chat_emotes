@@ -57,6 +57,19 @@ $(document).ready(async function () {
 
     let effect = urlParams.get('effect') || '';
 
+    let effectsArray = [];
+    
+    // Handle legacy 'random' effect parameter
+    if (effect === 'random') {
+        effectsArray = ['fade', 'pop_in', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom', 'left_right', 'right_left'];
+    } else if (effect) {
+        // Parse comma-separated effects into an array
+        effectsArray = effect.split(',').filter(e => e.trim() !== '');
+    } else {
+        // Default to fade if no effect specified
+        effectsArray = ['fade'];
+    }
+
     if (emoteSize !== 'random') {
         // convert size string to integer
         emoteSize = parseInt(emoteSize);
@@ -379,8 +392,12 @@ $(document).ready(async function () {
 
         let currentEffect = effect;
         if (effect === 'random') {
-            const effectsArray = ['fade', 'pop_in', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom', 'left_right', 'right_left'];
             currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
+        } else if (effectsArray.length > 1) {
+            // If multiple effects are selected but effect isn't 'random', pick randomly
+            currentEffect = effectsArray[Math.floor(Math.random() * effectsArray.length)];
+        } else if (effectsArray.length === 1) {
+            currentEffect = effectsArray[0];
         }
 
         let $emoteDiv = $("<div class='latestblock'><img src='" + emoteUrl + "' /></div>").appendTo("#container");

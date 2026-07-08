@@ -214,14 +214,14 @@
     </div>
     <div class="form-group range-slider">
         <label for="speed">Speed</label>
-        <input type="range" max="50" min="5" step="5" class="form-control range-slider-range shadow" id="speed"
+        <input type="range" max="30" min="1" step="1" class="form-control range-slider-range shadow" id="speed"
                value="5" style="height: 0;">
         <small class="text-muted range-slider-value"></small>
         <small class="text-muted range-slider-value">&nbsp;Seconds</small>
     </div>
     <div class="form-group range-slider">
         <label for="duration">Duration</label>
-        <input type="range" max="3600" min="5" step="5" class="form-control range-slider-range shadow" id="duration"
+        <input type="range" max="120" min="1" step="1" class="form-control range-slider-range shadow" id="duration"
                value="15" style="height: 0;">
         <small class="text-muted range-slider-value"></small>
         <small class="text-muted range-slider-value">&nbsp;Seconds</small>
@@ -248,21 +248,46 @@
     </div>
 
     <div class="form-group">
-        <label for="effect">Effects</label>
-        <select class="form-control shadow" id="effect">
-            <option value="">Fade</option>
-            <option value="pop_in">Pop-in</option>
-            <option value="grow">Grow</option>
-            <option value="rotate">Rotate</option>
-            <option value="skew">Skew</option>
-            <option value="bottom_top">Bottom to Top</option>
-            <option value="top_bottom">Top to Bottom</option>
-            <option value="left_right">Left to Right</option>
-            <option value="right_left">Right to Left</option>
-            <option value="random">Random</option>
-        </select>
+        <label>Effects</label>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="fade" id="effect_fade">
+            <label class="form-check-label" for="effect_fade">Fade</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="pop_in" id="effect_pop_in">
+            <label class="form-check-label" for="effect_pop_in">Pop-in</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="grow" id="effect_grow">
+            <label class="form-check-label" for="effect_grow">Grow</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="rotate" id="effect_rotate">
+            <label class="form-check-label" for="effect_rotate">Rotate</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="skew" id="effect_skew">
+            <label class="form-check-label" for="effect_skew">Skew</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="bottom_top" id="effect_bottom_top">
+            <label class="form-check-label" for="effect_bottom_top">Bottom to Top</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="top_bottom" id="effect_top_bottom">
+            <label class="form-check-label" for="effect_top_bottom">Top to Bottom</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="left_right" id="effect_left_right">
+            <label class="form-check-label" for="effect_left_right">Left to Right</label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input shadow effect-checkbox" type="checkbox" value="right_left" id="effect_right_left">
+            <label class="form-check-label" for="effect_right_left">Right to Left</label>
+        </div>
     </div>
-    <div class="form-check">
+
+    <div class="form-check mt-4">
         <input class="form-check-input shadow" type="checkbox" value="" id="fishtank">
         <label class="form-check-label" for="fishtank">
             Fish Tank Mode
@@ -318,7 +343,11 @@
             let speed = document.getElementById("speed").value;
             speed = speed + '000'; // convert seconds to milliseconds
             let size = document.getElementById("size").value;
-            let effect = document.getElementById("effect").value;
+            let selectedEffects = [];
+            document.querySelectorAll('.effect-checkbox:checked').forEach(checkbox => {
+                selectedEffects.push(checkbox.value);
+            });
+            let effect = selectedEffects.length > 0 ? selectedEffects.join(',') : '';
             let customsize = document.getElementById("customsize").value;
             let fishtank = document.getElementById("fishtank").checked;
             let bttv = document.getElementById("bttv").checked;
