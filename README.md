@@ -19,7 +19,7 @@ This demo is using Random emote size and Random effect. Great for DJ streams.
 ## Configuration Generator
 
 You can easily generate your overlay URL using the hosted configuration tool:
-[**https://twitch-chat-emotes.pages.dev/**](https://twitch-chat-emotes.pages.dev/)
+- [**https://twitch-chat-emotes.teklynk.com/**](https://twitch-chat-emotes.teklynk.com/)
 
 ## URL Parameters
 
