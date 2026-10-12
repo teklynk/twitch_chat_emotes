@@ -61,7 +61,7 @@ $(document).ready(async function () {
     
     // Handle legacy 'random' effect parameter
     if (effect === 'random') {
-        effectsArray = ['fade', 'pop_in', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom', 'left_right', 'right_left'];
+        effectsArray = ['fade', 'pop_in', 'grow', 'rotate', 'skew', 'bottom_top', 'top_bottom', 'left_right', 'right_left', 'bounce'];
     } else if (effect) {
         // Parse comma-separated effects into an array
         effectsArray = effect.split(',').filter(e => e.trim() !== '');
@@ -271,6 +271,77 @@ $(document).ready(async function () {
         return Math.floor(Math.random() * (to - from + 1) + from);
     }
 
+    const bouncingEmotes = new Set();
+    let bounceFrame = null;
+
+    function animateBouncingEmotes(timestamp) {
+        bouncingEmotes.forEach(function (emote) {
+            if (!emote.element.isConnected) {
+                bouncingEmotes.delete(emote);
+                return;
+            }
+
+            const maxX = Math.max(0, window.innerWidth - emote.width);
+            const maxY = Math.max(0, window.innerHeight - emote.height);
+            const elapsed = Math.min(timestamp - emote.lastTimestamp, 50);
+            emote.lastTimestamp = timestamp;
+
+            emote.x += emote.velocityX * elapsed;
+            emote.y += emote.velocityY * elapsed;
+
+            if (emote.x <= 0 || emote.x >= maxX) {
+                emote.x = Math.max(0, Math.min(emote.x, maxX));
+                emote.velocityX *= -1;
+            }
+            if (emote.y <= 0 || emote.y >= maxY) {
+                emote.y = Math.max(0, Math.min(emote.y, maxY));
+                emote.velocityY *= -1;
+            }
+
+            emote.element.style.left = emote.x + 'px';
+            emote.element.style.top = emote.y + 'px';
+        });
+
+        if (bouncingEmotes.size > 0) {
+            bounceFrame = window.requestAnimationFrame(animateBouncingEmotes);
+        } else {
+            bounceFrame = null;
+        }
+    }
+
+    function bounceAround(obj) {
+        const element = obj[0];
+        obj.find('img').css('display', 'block');
+        const width = obj.outerWidth();
+        const height = obj.outerHeight();
+        const maxX = Math.max(0, window.innerWidth - width);
+        const maxY = Math.max(0, window.innerHeight - height);
+        const speedScaleX = window.innerWidth / animationSpeed;
+        const speedScaleY = window.innerHeight / animationSpeed;
+
+        obj.css({
+            left: randomFromTo(0, maxX) + 'px',
+            top: randomFromTo(0, maxY) + 'px',
+            opacity: 1
+        });
+        obj.find('img').fadeIn(250);
+
+        bouncingEmotes.add({
+            element: element,
+            x: parseFloat(element.style.left) || 0,
+            y: parseFloat(element.style.top) || 0,
+            width: width,
+            height: height,
+            velocityX: (Math.random() < 0.5 ? -1 : 1) * randomFromTo(50, 150) / 100 * speedScaleX,
+            velocityY: (Math.random() < 0.5 ? -1 : 1) * randomFromTo(50, 150) / 100 * speedScaleY,
+            lastTimestamp: performance.now()
+        });
+
+        if (bounceFrame === null) {
+            bounceFrame = window.requestAnimationFrame(animateBouncingEmotes);
+        }
+    }
+
     function moveVertically(obj, direction) {
         const containerHeight = window.innerHeight;
         const emoteHeight = obj.height();
@@ -402,7 +473,23 @@ $(document).ready(async function () {
 
         let $emoteDiv = $("<div class='latestblock'><img src='" + emoteUrl + "' /></div>").appendTo("#container");
 
-        if (currentEffect === 'bottom_top' || currentEffect === 'top_bottom') {
+        if (currentEffect === 'bounce') {
+            $emoteDiv.find('img').on('load', function() {
+                bounceAround($emoteDiv);
+            }).on('error', function() {
+                $emoteDiv.remove();
+            });
+
+            if ($emoteDiv.find('img')[0].complete) {
+                $emoteDiv.find('img').trigger('load');
+            }
+
+            if (fishTank !== 'true') {
+                setTimeout(function() {
+                    $emoteDiv.animate({ opacity: 0 }, { duration: 2000, queue: false, complete: function() { $(this).remove(); } });
+                }, duration);
+            }
+        } else if (currentEffect === 'bottom_top' || currentEffect === 'top_bottom') {
             const direction = currentEffect === 'bottom_top' ? 'up' : 'down';
             const randomDelay = Math.floor(Math.random() * 3000);
 

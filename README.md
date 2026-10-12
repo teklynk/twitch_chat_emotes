@@ -33,7 +33,7 @@ Configure the overlay by adding these parameters to the URL.
 | `duration` | Integer | `5000` | How long emotes stay on screen in milliseconds. |
 | `size` | String/Int | `2` | Twitch emote size: `1` (28px), `2` (56px), `3` (112px), or `random`. |
 | `customsize` | Integer | `0` | Force a specific pixel size (e.g., `50` for 50px). Overrides `size`. |
-| `effect` | String | `fade` | Animation: `grow`, `rotate`, `skew`, `bottom_top`, `top_bottom`, `random`, `pop_in`. |
+| `effect` | String | `fade` | Animation: `grow`, `rotate`, `skew`, `bottom_top`, `top_bottom`, `bounce`, `random`, `pop_in`. |
 | `fishtank` | Boolean | `false` | If `true`, emotes persist on screen indefinitely until refreshed. |
 | `emoteLimit` | Integer | `50` | Max number of emotes to show per chat message. |
 | `bttv` | Boolean | `false` | Enable BetterTTV emotes. |
